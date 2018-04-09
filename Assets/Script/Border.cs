@@ -16,7 +16,7 @@ public class Border : MonoBehaviour {
 
   private void OnTriggerEnter2D(Collider2D collision)
   {
-    if(collision.gameObject.name == "Cloud")
+    if(collision.gameObject.name != "Airship")
     {
       Destroy(collision.gameObject);
     }

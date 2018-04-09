@@ -18,6 +18,11 @@ public class Cloud : MonoBehaviour {
 
   private void OnTriggerEnter2D(Collider2D collision)
   {
-    Destroy(gameObject);
+    if (collision.gameObject.name == "Airship")
+    {
+      GameObject.Find("GameController").GetComponent<GameController>().IncreaseScore();
+      Destroy(gameObject); // Add points
+
+    }
   }
 }
