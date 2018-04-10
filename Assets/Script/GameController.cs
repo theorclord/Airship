@@ -9,6 +9,7 @@ public class GameController : MonoBehaviour {
   public GameObject Rock;
   public GameObject ScoreText;
   public GameObject LivesText;
+  public GameObject GameOverScreen;
   private float timeCloudLastSpawn;
   private float timeRockLastSpawn;
 
@@ -52,6 +53,7 @@ public class GameController : MonoBehaviour {
     if(lives <= 0)
     {
       gameOver = true;
+      GameOverScreen.SetActive(true);
     }
     LivesText.GetComponent<Text>().text = "Lives: " + lives;
   }
