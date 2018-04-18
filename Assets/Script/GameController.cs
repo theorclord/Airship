@@ -14,29 +14,45 @@ public class GameController : MonoBehaviour {
   private float timeRockLastSpawn;
 
   private int score;
-  private int lives;
-  private bool gameOver;
+  private int lives = 3;
+  public bool GameOver = false;
+  public float BackgroundSpeed = 2f;
+  public static GameController Instance
+  {
+    get; set;
+  }
+
+  void Awake()
+  {
+    //If we don't currently have a game control...
+    if (Instance == null)
+      //...set this one to be it...
+      Instance = this;
+    //...otherwise...
+    else if (Instance != this)
+      //...destroy this one because it is a duplicate.
+      Destroy(gameObject);
+  }
+  
   // Use this for initialization
   void Start () {
-    lives = 3;
     timeCloudLastSpawn = Time.time;
-    gameOver = false;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-    if (!gameOver)
+    if (!GameOver)
     {
       if (Time.time - timeCloudLastSpawn > 1)
       {
         timeCloudLastSpawn = Time.time;
-        Instantiate(Cloud, new Vector3(5f, Random.Range(-10f, 10f)), Quaternion.identity);
+        Instantiate(Cloud, new Vector3(18f, Random.Range(-10f, 10f)), Quaternion.identity);
       }
 
       if (Time.time - timeRockLastSpawn > 5)
       {
         timeRockLastSpawn = Time.time;
-        Instantiate(Rock, new Vector3(5f, Random.Range(-10f, 10f)), Quaternion.identity);
+        Instantiate(Rock, new Vector3(18f, Random.Range(-10f, 10f)), Quaternion.identity);
       }
     }
 	}
@@ -52,7 +68,7 @@ public class GameController : MonoBehaviour {
     lives -= 1;
     if(lives <= 0)
     {
-      gameOver = true;
+      GameOver = true;
       GameOverScreen.SetActive(true);
     }
     LivesText.GetComponent<Text>().text = "Lives: " + lives;

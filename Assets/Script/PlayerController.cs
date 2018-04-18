@@ -32,5 +32,7 @@ public class PlayerController : MonoBehaviour {
       Vector3 movement = new Vector3(0, -1);
       transform.Translate(movement * speed);
     }
+    transform.position = new Vector2(Mathf.Clamp(transform.position.x, -25f, 25f), Mathf.Clamp(transform.position.y, -7f, 7f));
+    
   }
 }
