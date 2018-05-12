@@ -12,7 +12,7 @@ public class Cloud : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-    transform.Translate(new Vector3(-1* cloudSpeed, 0));
+    transform.Translate(new Vector3(-1* cloudSpeed * GameController.Instance.CurrentSpeedModifier, 0));
 		
 	}
 
@@ -20,7 +20,7 @@ public class Cloud : MonoBehaviour {
   {
     if (collision.gameObject.name == "Airship")
     {
-      GameObject.Find("GameController").GetComponent<GameController>().IncreaseScore();
+      GameController.Instance.IncreaseScore();
       Destroy(gameObject); // Add points
 
     }

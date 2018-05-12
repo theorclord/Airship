@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Border : MonoBehaviour {
 
+  public int CloudMissed;
+  //public int Streak;
 	// Use this for initialization
 	void Start () {
 		
@@ -18,6 +20,8 @@ public class Border : MonoBehaviour {
   {
     if(collision.gameObject.name != "Airship")
     {
+      if (collision.gameObject.name == "Cloud(Clone)")
+        CloudMissed++;
       Destroy(collision.gameObject);
     }
   }

@@ -19,4 +19,16 @@ public class MenuController : MonoBehaviour {
   {
     SceneManager.LoadScene("Main");
   }
+
+  public void Credits()
+  {
+    // show the credit scene
+    // hide buttons
+    // show credit panel
+  }
+
+  public void ExitGame()
+  {
+    Application.Quit();
+  }
 }

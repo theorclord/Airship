@@ -13,9 +13,17 @@ public class GameController : MonoBehaviour {
   private float timeCloudLastSpawn;
   private float timeRockLastSpawn;
 
-  private int score;
+  public float CurrentSpeedModifier { get; set; }
+
+  
   private int lives = 3;
+  private float speedFactor = 10f;
+  //private int rocksSpawned = 2;
+  private float spawnX = 25f;
+  private float rockSpawnFrequency = 2f;
+
   public bool GameOver = false;
+  private int score;
   public float BackgroundSpeed = 2f;
   public static GameController Instance
   {
@@ -46,31 +54,44 @@ public class GameController : MonoBehaviour {
       if (Time.time - timeCloudLastSpawn > 1)
       {
         timeCloudLastSpawn = Time.time;
-        Instantiate(Cloud, new Vector3(18f, Random.Range(-10f, 10f)), Quaternion.identity);
+        Instantiate(Cloud, new Vector3(spawnX, Random.Range(-10f, 10f)), Quaternion.identity);
       }
 
-      if (Time.time - timeRockLastSpawn > 5)
+      if (Time.time - timeRockLastSpawn > rockSpawnFrequency)
       {
         timeRockLastSpawn = Time.time;
-        Instantiate(Rock, new Vector3(18f, Random.Range(-10f, 10f)), Quaternion.identity);
+        Instantiate(Rock, new Vector3(spawnX, Random.Range(-10f, 10f)), Quaternion.identity);
       }
+
+      // Speed up the game
+      CurrentSpeedModifier = 1 + Mathf.Clamp( Mathf.Floor( Time.time/speedFactor)/10,0,9);
     }
 	}
 
   public void IncreaseScore()
   {
-    score += 100;
-    ScoreText.GetComponent<Text>().text = "Score: " + score;
+    if (!GameOver)
+    {
+      score += 100;
+      ScoreText.GetComponent<Text>().text = "Score: " + score;
+    }
   }
 
   public void DescreaseLives()
   {
     lives -= 1;
-    if(lives <= 0)
+    if(lives <= 0 && !GameOver)
     {
-      GameOver = true;
-      GameOverScreen.SetActive(true);
+      HandleGameOver();
     }
     LivesText.GetComponent<Text>().text = "Lives: " + lives;
+  }
+
+  public void HandleGameOver()
+  {
+    GameOver = true;
+    GameOverScreen.SetActive(true);
+    GameOverScreen.transform.GetChild(1).GetComponent<Text>().text = "Score: " + score;
+    GameOverScreen.transform.GetChild(2).GetComponent<Text>().text = "Time: " + Time.time;
   }
 }
