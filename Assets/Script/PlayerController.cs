@@ -33,12 +33,22 @@ public class PlayerController : MonoBehaviour {
       transform.Translate(movement * speed * GameController.Instance.CurrentSpeedModifier);
     }
 
-    Vector3 pos = Camera.main.WorldToViewportPoint(transform.position);
-    pos.x = Mathf.Clamp01(pos.x);
-    pos.y = Mathf.Clamp01(pos.y);
-    transform.position = Camera.main.ViewportToWorldPoint(pos);
-
-    //transform.position = new Vector2(Mathf.Clamp(transform.position.x, -25f, 25f), Mathf.Clamp(transform.position.y, -7f, 7f));
+    // Clamp the player object, so that it can't leave the camera frame.
+    //TODO get size from const class
+    Vector3 pospixel = Camera.main.WorldToScreenPoint(transform.position);
+    pospixel.x = Mathf.Clamp(pospixel.x, Camera.main.WorldToScreenPoint(Camera.main.ViewportToWorldPoint(Vector3.zero)).x 
+      // add half the size of the sprite
+      + 40, 
+      Camera.main.WorldToScreenPoint(Camera.main.ViewportToWorldPoint(Vector3.right)).x 
+      // Subtract half the size of the sprite
+      - 40);
+    pospixel.y = Mathf.Clamp(pospixel.y, Camera.main.WorldToScreenPoint(Camera.main.ViewportToWorldPoint(Vector3.zero)).y
+      // add half the size of the sprite
+      +40,
+      Camera.main.WorldToScreenPoint(Camera.main.ViewportToWorldPoint(Vector3.up)).y
+      // Subtract half the size of the sprite
+      - 40);
+    transform.position = Camera.main.ScreenToWorldPoint(pospixel);
     
   }
 }

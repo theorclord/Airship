@@ -21,15 +21,14 @@ public class GameController : MonoBehaviour {
   //private int rocksSpawned = 2;
   private float spawnX = 25f;
   private float rockSpawnFrequency = 2f;
+  private float cloudSpawnFrequency = 1f;
 
   public bool GameOver = false;
   private int score;
   public float BackgroundSpeed = 2f;
-  public static GameController Instance
-  {
-    get; set;
-  }
+  public static GameController Instance { get; set; }
 
+  private AchievementController acController;
   void Awake()
   {
     //If we don't currently have a game control...
@@ -45,13 +44,14 @@ public class GameController : MonoBehaviour {
   // Use this for initialization
   void Start () {
     timeCloudLastSpawn = Time.time;
+    acController = new AchievementController();
 	}
 	
 	// Update is called once per frame
 	void Update () {
     if (!GameOver)
     {
-      if (Time.time - timeCloudLastSpawn > 1)
+      if (Time.time - timeCloudLastSpawn > cloudSpawnFrequency)
       {
         timeCloudLastSpawn = Time.time;
         Instantiate(Cloud, new Vector3(spawnX, Random.Range(-10f, 10f)), Quaternion.identity);
@@ -65,6 +65,8 @@ public class GameController : MonoBehaviour {
 
       // Speed up the game
       CurrentSpeedModifier = 1 + Mathf.Clamp( Mathf.Floor( Time.time/speedFactor)/10,0,9);
+      rockSpawnFrequency = 2f / CurrentSpeedModifier;
+      cloudSpawnFrequency = 1f / CurrentSpeedModifier;
     }
 	}
 
@@ -72,8 +74,9 @@ public class GameController : MonoBehaviour {
   {
     if (!GameOver)
     {
-      score += 100;
-      ScoreText.GetComponent<Text>().text = "Score: " + score;
+      acController.Points += 100;
+      ScoreText.GetComponent<Text>().text = "Score: " + acController.Points;
+      acController.StreakCount++;
     }
   }
 
@@ -93,5 +96,10 @@ public class GameController : MonoBehaviour {
     GameOverScreen.SetActive(true);
     GameOverScreen.transform.GetChild(1).GetComponent<Text>().text = "Score: " + score;
     GameOverScreen.transform.GetChild(2).GetComponent<Text>().text = "Time: " + Time.time;
+  }
+
+  public void CloudMissed()
+  {
+    acController.StreakCount = 0;
   }
 }
