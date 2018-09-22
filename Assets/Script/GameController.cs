@@ -24,7 +24,6 @@ public class GameController : MonoBehaviour {
   private float cloudSpawnFrequency = 1f;
 
   public bool GameOver = false;
-  private int score;
   public float BackgroundSpeed = 2f;
   public static GameController Instance { get; set; }
 
@@ -77,6 +76,7 @@ public class GameController : MonoBehaviour {
       acController.Points += 100;
       ScoreText.GetComponent<Text>().text = "Score: " + acController.Points;
       acController.StreakCount++;
+      // call achievement controller
     }
   }
 
@@ -88,14 +88,17 @@ public class GameController : MonoBehaviour {
       HandleGameOver();
     }
     LivesText.GetComponent<Text>().text = "Lives: " + lives;
+    // call achievement controller
+    acController.InitStreakCount = false;
   }
 
   public void HandleGameOver()
   {
     GameOver = true;
     GameOverScreen.SetActive(true);
-    GameOverScreen.transform.GetChild(1).GetComponent<Text>().text = "Score: " + score;
+    GameOverScreen.transform.GetChild(1).GetComponent<Text>().text = "Score: " + acController.Points;
     GameOverScreen.transform.GetChild(2).GetComponent<Text>().text = "Time: " + Time.time;
+    // call achievement controller
   }
 
   public void CloudMissed()

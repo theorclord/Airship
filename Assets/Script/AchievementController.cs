@@ -5,10 +5,28 @@ using UnityEngine;
 public class AchievementController : MonoBehaviour {
 
 
-  public int StreakCount { get; set; }
+  private int streakCount;
+  public int StreakCount
+  {
+    get { return streakCount; }
+    set
+    {
+      if(streakCount > LongestStreak)
+      {
+        LongestStreak = streakCount;
+      }
+      streakCount = value;
+    }
+  }
   public bool InitStreakCount { get; set; }
   public float Points { get; set; }
 
+
+  public int LongestStreak
+  {
+    get;
+    private set;
+  }
 
 	// Use this for initialization
 	void Start () {
