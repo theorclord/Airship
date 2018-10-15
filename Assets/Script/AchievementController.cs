@@ -28,6 +28,14 @@ public class AchievementController : MonoBehaviour {
     private set;
   }
 
+  // longest dodge
+  // dodgeroo
+
+  //no cactch 
+  //longest time no sky or rock
+
+  
+
 	// Use this for initialization
 	void Start () {
 		

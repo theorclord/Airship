@@ -20,9 +20,12 @@ public class Cloud : MonoBehaviour {
   {
     if (collision.gameObject.name == "Airship")
     {
+      collision.gameObject.GetComponent<AudioSource>().Play();
       GameController.Instance.IncreaseScore();
       Destroy(gameObject); // Add points
 
     }
   }
+
+
 }
