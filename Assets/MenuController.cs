@@ -5,6 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class MenuController : MonoBehaviour {
 
+  public GameObject ControlsPanel;
+
 	// Use this for initialization
 	void Start () {
 		
@@ -18,5 +20,10 @@ public class MenuController : MonoBehaviour {
   public void StartGame()
   {
     SceneManager.LoadScene("Main");
+  }
+
+  public void SwitchControls(bool state)
+  {
+    ControlsPanel.SetActive(state);
   }
 }
