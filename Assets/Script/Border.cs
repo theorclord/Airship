@@ -18,6 +18,8 @@ public class Border : MonoBehaviour {
   {
     if(collision.gameObject.name != "Airship")
     {
+      if (collision.gameObject.name == "Cloud(Clone)")
+        GameController.Instance.CloudMissed();
       Destroy(collision.gameObject);
     }
   }

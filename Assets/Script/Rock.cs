@@ -12,14 +12,14 @@ public class Rock : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-    transform.Translate(new Vector3(-1 * rockSpeed, 0));
+    transform.Translate(new Vector3(-1 * rockSpeed* GameController.Instance.CurrentSpeedModifier, 0));
   }
 
   private void OnTriggerEnter2D(Collider2D collision)
   {
     if (collision.gameObject.name == "Airship")
     {
-      GameObject.Find("GameController").GetComponent<GameController>().DescreaseLives();
+      GameController.Instance.DescreaseLives();
       Destroy(gameObject); // Deal damage to airship
     }
   }
