@@ -13,7 +13,7 @@ public class GameController : MonoBehaviour {
   private float timeCloudLastSpawn;
   private float timeRockLastSpawn;
 
-  public float CurrentSpeedModifier { get; set; }
+  public float CurrentSpeedModifier;
 
   
   private int lives = 3;
@@ -22,6 +22,7 @@ public class GameController : MonoBehaviour {
   private float spawnX = 25f;
   private float rockSpawnFrequency = 2f;
   private float cloudSpawnFrequency = 1f;
+  private float maxSpeed = 20f;
 
   public bool GameOver = false;
   public float BackgroundSpeed = 2f;
@@ -63,7 +64,7 @@ public class GameController : MonoBehaviour {
       }
 
       // Speed up the game
-      CurrentSpeedModifier = 1 + Mathf.Clamp( Mathf.Floor( Time.time/speedFactor)/10,0,9);
+      CurrentSpeedModifier = 1 + Mathf.Clamp( Mathf.Floor( Time.time/speedFactor)/10,0, maxSpeed);
       rockSpawnFrequency = 2f / CurrentSpeedModifier;
       cloudSpawnFrequency = 1f / CurrentSpeedModifier;
     }

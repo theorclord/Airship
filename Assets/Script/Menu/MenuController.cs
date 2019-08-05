@@ -8,6 +8,7 @@ public class MenuController : MonoBehaviour {
 
   public GameObject MainMenu;
   public GameObject OptionsMenu;
+  public GameObject CreditsMenu;
   public Slider SoundSlider;
   public GameObject ControlsPanel;
   public GameObject TitleImage;
@@ -29,9 +30,10 @@ public class MenuController : MonoBehaviour {
 
   public void Credits()
   {
-    // show the credit scene
-    // hide buttons
-    // show credit panel
+    MainMenu.SetActive(false);
+    OptionsMenu.SetActive(false);
+    TitleImage.SetActive(false);
+    CreditsMenu.SetActive(true);
   }
 
   public void Options()
@@ -48,6 +50,7 @@ public class MenuController : MonoBehaviour {
     MainMenu.SetActive(true);
     OptionsMenu.SetActive(false);
     TitleImage.SetActive(true);
+    CreditsMenu.SetActive(false);
   }
 
   public void SwitchControls(bool state)

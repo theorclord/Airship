@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour {
 
   private float speed = 0.15f;
+  private float spriteSize = 40f;
 	// Use this for initialization
 	void Start () {
 		
@@ -38,16 +39,16 @@ public class PlayerController : MonoBehaviour {
     Vector3 pospixel = Camera.main.WorldToScreenPoint(transform.position);
     pospixel.x = Mathf.Clamp(pospixel.x, Camera.main.WorldToScreenPoint(Camera.main.ViewportToWorldPoint(Vector3.zero)).x 
       // add half the size of the sprite
-      + 40, 
+      + spriteSize, 
       Camera.main.WorldToScreenPoint(Camera.main.ViewportToWorldPoint(Vector3.right)).x 
       // Subtract half the size of the sprite
-      - 40);
+      - spriteSize);
     pospixel.y = Mathf.Clamp(pospixel.y, Camera.main.WorldToScreenPoint(Camera.main.ViewportToWorldPoint(Vector3.zero)).y
       // add half the size of the sprite
-      +40,
+      + spriteSize,
       Camera.main.WorldToScreenPoint(Camera.main.ViewportToWorldPoint(Vector3.up)).y
       // Subtract half the size of the sprite
-      - 40);
+      - spriteSize);
     transform.position = Camera.main.ScreenToWorldPoint(pospixel);
     
   }
