@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour {
 
+  //TODO Move to const class
   private float speed = 0.15f;
   private float spriteSize = 40f;
 	// Use this for initialization
@@ -35,7 +36,6 @@ public class PlayerController : MonoBehaviour {
     }
 
     // Clamp the player object, so that it can't leave the camera frame.
-    //TODO get size from const class
     Vector3 pospixel = Camera.main.WorldToScreenPoint(transform.position);
     pospixel.x = Mathf.Clamp(pospixel.x, Camera.main.WorldToScreenPoint(Camera.main.ViewportToWorldPoint(Vector3.zero)).x 
       // add half the size of the sprite
