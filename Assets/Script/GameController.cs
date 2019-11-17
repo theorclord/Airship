@@ -4,7 +4,8 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class GameController : MonoBehaviour {
+public class GameController : MonoBehaviour
+{
 
   public GameObject Cloud;
   public GameObject Rock;
@@ -16,14 +17,14 @@ public class GameController : MonoBehaviour {
 
   public float CurrentSpeedModifier;
 
-  
+
   private int lives = 3;
-  private float speedFactor = 10f;
+  private readonly float speedFactor = 10f;
   //private int rocksSpawned = 2;
-  private float spawnX = 25f;
+  private readonly float spawnX = 25f;
   private float rockSpawnFrequency = 2f;
   private float cloudSpawnFrequency = 1f;
-  private float maxSpeed = 20f;
+  private readonly float maxSpeed = 20f;
 
   public bool GameOver = false;
   public float BackgroundSpeed = 2f;
@@ -41,15 +42,17 @@ public class GameController : MonoBehaviour {
       //...destroy this one because it is a duplicate.
       Destroy(gameObject);
   }
-  
+
   // Use this for initialization
-  void Start () {
+  void Start()
+  {
     timeCloudLastSpawn = Time.time;
     acController = new AchievementController();
-	}
-	
-	// Update is called once per frame
-	void Update () {
+  }
+
+  // Update is called once per frame
+  void Update()
+  {
     if (!GameOver)
     {
       if (Time.time - timeCloudLastSpawn > cloudSpawnFrequency)
@@ -65,11 +68,11 @@ public class GameController : MonoBehaviour {
       }
 
       // Speed up the game
-      CurrentSpeedModifier = 1 + Mathf.Clamp( Mathf.Floor( Time.time/speedFactor)/10,0, maxSpeed);
+      CurrentSpeedModifier = 1 + Mathf.Clamp(Mathf.Floor(Time.time / speedFactor) / 10, 0, maxSpeed);
       rockSpawnFrequency = 2f / CurrentSpeedModifier;
       cloudSpawnFrequency = 1f / CurrentSpeedModifier;
     }
-	}
+  }
 
   public void IncreaseScore()
   {
@@ -85,7 +88,7 @@ public class GameController : MonoBehaviour {
   public void DescreaseLives()
   {
     lives -= 1;
-    if(lives <= 0 && !GameOver)
+    if (lives <= 0 && !GameOver)
     {
       HandleGameOver();
     }
