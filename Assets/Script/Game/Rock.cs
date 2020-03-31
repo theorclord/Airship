@@ -19,8 +19,9 @@ public class Rock : MonoBehaviour {
   {
     if (collision.gameObject.name == "Airship")
     {
-      GameController.Instance.DescreaseLives();
-      Destroy(gameObject); // Deal damage to airship
+            // Deal damage to airship
+            GameController.Instance.DescreaseLives();
+      Destroy(gameObject);
     }
   }
 }

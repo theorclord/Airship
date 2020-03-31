@@ -7,17 +7,27 @@ public class PersistentData : MonoBehaviour {
 
   public float SoundVal { get; set; }
 
-  private static PersistentData _instance;
-  public static PersistentData Instance()
-  {
-    return _instance;
-  }
+  public AchievementController AchievementController { get; private set; }
+    
+  public static PersistentData Instance { get; set; }
   void Awake()
   {
-    DontDestroyOnLoad(this);
-    _instance = this;
+        //If we don't currently have a game control...
+        if (Instance == null)
+        {
+            //...set this one to be it...
+            Instance = this;
+        }
+        //...otherwise...
+        else if (Instance != this)
+        {
+            //...destroy this one because it is a duplicate.
+            Destroy(gameObject);
+        }
+        DontDestroyOnLoad(this);
     //Load the soundval from last config file.
     SoundVal = 1;
+    AchievementController = new AchievementController();
   }
 	// Use this for initialization
 	void Start () {

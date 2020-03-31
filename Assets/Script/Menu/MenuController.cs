@@ -16,6 +16,8 @@ public class MenuController : MonoBehaviour {
   public GameObject CreditsMenu;
 
   public GameObject ControlsPanel;
+
+  public GameObject AchievementPanel;
   
 
   // Use this for initialization
@@ -25,7 +27,7 @@ public class MenuController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-    GetComponent<AudioSource>().volume = PersistentData.Instance().SoundVal;
+    GetComponent<AudioSource>().volume = PersistentData.Instance.SoundVal;
 	}
 
   public void StartGame()
@@ -44,7 +46,7 @@ public class MenuController : MonoBehaviour {
     SetActiveFalse();
     OptionsMenu.SetActive(true);
 
-    SoundSlider.value = PersistentData.Instance().SoundVal;
+    SoundSlider.value = PersistentData.Instance.SoundVal;
   }
 
   public void MainMenuSet()
@@ -63,6 +65,7 @@ public class MenuController : MonoBehaviour {
   public void ShowAchievements()
   {
     SetActiveFalse();
+    AchievementPanel.SetActive(true);
   }
 
   private void SetActiveFalse()
@@ -72,12 +75,13 @@ public class MenuController : MonoBehaviour {
     OptionsMenu.SetActive(false);
     TitleImage.SetActive(false);
     CreditsMenu.SetActive(false);
+    AchievementPanel.SetActive(false);
   }
 
   public void SetSoundLevel()
   {
     //Debug.Log("The current sound value: " + SoundSlider.value);
-    PersistentData.Instance().SoundVal = SoundSlider.value;
+    PersistentData.Instance.SoundVal = SoundSlider.value;
   }
   public void ExitGame()
   {

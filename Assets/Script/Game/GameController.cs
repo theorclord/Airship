@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class GameController : MonoBehaviour
 {
-
+    public GameObject AudioSourceController;
   public GameObject Cloud;
   public GameObject Rock;
   public GameObject ScoreText;
@@ -47,7 +47,8 @@ public class GameController : MonoBehaviour
   void Start()
   {
     timeCloudLastSpawn = Time.time;
-    acController = new AchievementController();
+    acController = PersistentData.Instance.AchievementController;
+        AudioSourceController.GetComponent<AudioSource>().volume = PersistentData.Instance.SoundVal;
   }
 
   // Update is called once per frame
