@@ -5,6 +5,10 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class MenuController : MonoBehaviour {
+    public enum Component
+    {
+        FirstCloudAchievement
+    }
 
   public GameObject TitleImage;
 
@@ -66,7 +70,11 @@ public class MenuController : MonoBehaviour {
   {
     SetActiveFalse();
     AchievementPanel.SetActive(true);
-  }
+        Image image = AchievementPanel.transform.Find(nameof(Component.FirstCloudAchievement)).GetComponent<Image>();
+        Color tempColor = image.color;
+        tempColor.a = PersistentData.Instance.AchievementController.FirstCloud ? 1f : 0.4f;
+        image.color = tempColor;
+    }
 
   private void SetActiveFalse()
   {
