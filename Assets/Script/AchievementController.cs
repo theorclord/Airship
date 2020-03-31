@@ -34,7 +34,7 @@ public class AchievementController
   //no cactch 
   //longest time no sky or rock
   
-
+  public bool FirstCloud { get; set; }
 
 
 

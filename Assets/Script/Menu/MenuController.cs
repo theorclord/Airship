@@ -6,12 +6,17 @@ using UnityEngine.UI;
 
 public class MenuController : MonoBehaviour {
 
-  public GameObject MainMenu;
-  public GameObject OptionsMenu;
-  public GameObject CreditsMenu;
-  public Slider SoundSlider;
-  public GameObject ControlsPanel;
   public GameObject TitleImage;
+
+  public GameObject MainMenu;
+
+  public GameObject OptionsMenu;
+  public Slider SoundSlider;
+
+  public GameObject CreditsMenu;
+
+  public GameObject ControlsPanel;
+  
 
   // Use this for initialization
   void Start () {
@@ -30,34 +35,43 @@ public class MenuController : MonoBehaviour {
 
   public void Credits()
   {
-    MainMenu.SetActive(false);
-    OptionsMenu.SetActive(false);
-    TitleImage.SetActive(false);
+    SetActiveFalse();
     CreditsMenu.SetActive(true);
   }
 
   public void Options()
   {
-    MainMenu.SetActive(false);
+    SetActiveFalse();
     OptionsMenu.SetActive(true);
-    TitleImage.SetActive(false);
 
     SoundSlider.value = PersistentData.Instance().SoundVal;
   }
 
   public void MainMenuSet()
   {
+    SetActiveFalse();
     MainMenu.SetActive(true);
-    OptionsMenu.SetActive(false);
     TitleImage.SetActive(true);
-    CreditsMenu.SetActive(false);
   }
 
-  public void SwitchControls(bool state)
+  public void SwitchControls()
   {
-    ControlsPanel.SetActive(state);
-    MainMenu.SetActive(!state);
-    TitleImage.SetActive(!state);
+    SetActiveFalse();
+    ControlsPanel.SetActive(true);
+  }
+
+  public void ShowAchievements()
+  {
+    SetActiveFalse();
+  }
+
+  private void SetActiveFalse()
+  {
+    ControlsPanel.SetActive(false);
+    MainMenu.SetActive(false);
+    OptionsMenu.SetActive(false);
+    TitleImage.SetActive(false);
+    CreditsMenu.SetActive(false);
   }
 
   public void SetSoundLevel()

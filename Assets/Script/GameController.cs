@@ -79,6 +79,10 @@ public class GameController : MonoBehaviour
     if (!GameOver)
     {
       acController.Points += 100;
+      if (!acController.FirstCloud)
+      {
+        acController.FirstCloud = true;
+      }
       ScoreText.GetComponent<Text>().text = "Score: " + acController.Points;
       acController.StreakCount++;
       // call achievement controller
