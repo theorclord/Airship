@@ -1,0 +1,17 @@
+Gameover panel:
+Enrich with achieved achievements in the current session
+
+
+General:
+Create a const class for all static values.
+
+Add save load of settings from options
+
+Have a pause functionality
+- this might include a menu for sound in the main game
+
+#Achievements
+Add 5000 cloud score
+Add 10 cloud streak
+Add 10 rock dodge streak
+
