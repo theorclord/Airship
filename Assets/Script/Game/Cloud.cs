@@ -15,8 +15,10 @@ public class Cloud : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.Translate(new Vector3(-1 * cloudSpeed * GameController.Instance.CurrentSpeedModifier, 0));
-
+        if (!PersistentData.Instance.Pause)
+        {
+            transform.Translate(new Vector3(-1 * cloudSpeed * GameController.Instance.CurrentSpeedModifier, 0));
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

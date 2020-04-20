@@ -25,7 +25,7 @@ public class GameController : MonoBehaviour
   private float rockSpawnFrequency = 2f;
   private float cloudSpawnFrequency = 1f;
   private readonly float maxSpeed = 20f;
-
+    
   public bool GameOver = false;
   public float BackgroundSpeed = 2f;
   public static GameController Instance { get; set; }
@@ -51,31 +51,35 @@ public class GameController : MonoBehaviour
         AudioSourceController.GetComponent<AudioSource>().volume = PersistentData.Instance.SoundVal;
   }
 
-  // Update is called once per frame
-  void Update()
-  {
-    if (!GameOver)
+    // Update is called once per frame
+    void Update()
     {
-      if (Time.time - timeCloudLastSpawn > cloudSpawnFrequency)
-      {
-        timeCloudLastSpawn = Time.time;
-        Instantiate(Cloud, new Vector3(spawnX, Random.Range(-10f, 10f)), Quaternion.identity);
-      }
+        if (!GameOver && !PersistentData.Instance.Pause)
+        {
+            if (Time.time - timeCloudLastSpawn > cloudSpawnFrequency)
+            {
+                timeCloudLastSpawn = Time.time;
+                Instantiate(Cloud, new Vector3(spawnX, Random.Range(-10f, 10f)), Quaternion.identity);
+            }
 
-      if (Time.time - timeRockLastSpawn > rockSpawnFrequency)
-      {
-        timeRockLastSpawn = Time.time;
-        Instantiate(Rock, new Vector3(spawnX, Random.Range(-10f, 10f)), Quaternion.identity);
-      }
+            if (Time.time - timeRockLastSpawn > rockSpawnFrequency)
+            {
+                timeRockLastSpawn = Time.time;
+                Instantiate(Rock, new Vector3(spawnX, Random.Range(-10f, 10f)), Quaternion.identity);
+            }
 
-      // Speed up the game
-      CurrentSpeedModifier = 1 + Mathf.Clamp(Mathf.Floor(Time.time / speedFactor) / 10, 0, maxSpeed);
-      rockSpawnFrequency = 2f / CurrentSpeedModifier;
-      cloudSpawnFrequency = 1f / CurrentSpeedModifier;
+            // Speed up the game
+            CurrentSpeedModifier = 1 + Mathf.Clamp(Mathf.Floor(Time.time / speedFactor) / 10, 0, maxSpeed);
+            rockSpawnFrequency = 2f / CurrentSpeedModifier;
+            cloudSpawnFrequency = 1f / CurrentSpeedModifier;
+        }
+        if(Input.GetKeyDown(KeyCode.P) || Input.GetKeyDown(KeyCode.Pause))
+        {
+            PersistentData.Instance.Pause = !PersistentData.Instance.Pause;
+        }
     }
-  }
 
-  public void IncreaseScore()
+    public void IncreaseScore()
   {
     if (!GameOver)
     {
