@@ -9,6 +9,8 @@ You control an airship and collect clouds.
 
 
 Change log:
+2020-05-19:
+Added ingame menu. Supports the pause function.
 Version 0.01:
 Added first achievement 
 Fixed sound volume on ingame objects.
