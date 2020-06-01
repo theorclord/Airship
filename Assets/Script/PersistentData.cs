@@ -8,8 +8,19 @@ public class PersistentData : MonoBehaviour
     //Todo move this to a better place
     public bool Pause { get; set; }
 
-
-    public float SoundVal { get; set; }
+    private float soundValPrivate;
+    public float SoundVal {
+        get
+        {
+            return soundValPrivate;
+        }
+        set
+        {
+            soundValPrivate = value;
+            PlayerPrefs.SetFloat(nameof(SoundVal), value);
+            PlayerPrefs.Save();
+        }
+    }
 
     private AchievementController _achievementController;
     public AchievementController AchievementController
@@ -40,8 +51,8 @@ public class PersistentData : MonoBehaviour
             Destroy(gameObject);
         }
         DontDestroyOnLoad(this);
-        //Load the soundval from last config file.
-        SoundVal = 1;
+        // Load the soundval from last config file.
+        SoundVal = PlayerPrefs.GetFloat(nameof(SoundVal), 1); ;
         _achievementController = new AchievementController();
     }
     // Use this for initialization
