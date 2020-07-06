@@ -1,13 +1,21 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using UnityEngine;
 
 public class PersistentData : MonoBehaviour
 {
-    //Todo move this to a better place
+    #region IngamgeVariables
     public bool Pause { get; set; }
+    public HighscoreEntry CurrentHighscoreEntry { get; set; }
+    #endregion
 
+    #region BinaryPersistence
+    public List<HighscoreEntry> HighScoreList { get; set; }
+    #endregion
+
+    #region PlayerPrefs
     private float soundValPrivate;
     public float SoundVal {
         get
@@ -21,6 +29,7 @@ public class PersistentData : MonoBehaviour
             PlayerPrefs.Save();
         }
     }
+    #endregion
 
     private AchievementController _achievementController;
     public AchievementController AchievementController
@@ -51,8 +60,12 @@ public class PersistentData : MonoBehaviour
             Destroy(gameObject);
         }
         DontDestroyOnLoad(this);
+
         // Load the soundval from last config file.
-        SoundVal = PlayerPrefs.GetFloat(nameof(SoundVal), 1); ;
+        SoundVal = PlayerPrefs.GetFloat(nameof(SoundVal), 1);
+        
+        LoadHighscoreData();
+
         _achievementController = new AchievementController();
     }
     // Use this for initialization
@@ -67,15 +80,25 @@ public class PersistentData : MonoBehaviour
 
     }
 
-    private void SaveData()
+    public void SaveHighscoreData()
     {
-        StringBuilder data = new StringBuilder();
-        string soundValSave = "<soundVal>" + SoundVal + "</soundVal>";
-        data.AppendLine(soundValSave);
+        BinaryFormatter binFormatter = new BinaryFormatter();
+        FileStream stream = new FileStream(Application.persistentDataPath + @"\highscore.bin", FileMode.OpenOrCreate, FileAccess.Write);
+        binFormatter.Serialize(stream, HighScoreList);
+        stream.Close();
     }
 
-    private void LoadData()
+    private void LoadHighscoreData()
     {
-
+        BinaryFormatter binFormatter = new BinaryFormatter();
+        FileStream stream = new FileStream(Application.persistentDataPath + @"\highscore.bin", FileMode.OpenOrCreate, FileAccess.Read);
+        object loadedObj = null;
+        if(stream.Length > 0)
+        {
+            loadedObj = binFormatter.Deserialize(stream);
+        }
+        stream.Close();
+        
+        HighScoreList = loadedObj != null ? (List<HighscoreEntry>)loadedObj : new List<HighscoreEntry>();
     }
 }

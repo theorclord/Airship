@@ -1,98 +1,104 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class MenuController : MonoBehaviour {
+public class MenuController : MonoBehaviour
+{
     public enum Component
     {
         FirstCloudAchievement
     }
 
-  public GameObject TitleImage;
+    public GameObject TitleImage;
 
-  public GameObject MainMenu;
+    public GameObject MainMenu;
 
-  public GameObject OptionsMenu;
-  public Slider SoundSlider;
+    public GameObject OptionsMenu;
+    public Slider SoundSlider;
 
-  public GameObject CreditsMenu;
+    public GameObject CreditsMenu;
 
-  public GameObject ControlsPanel;
+    public GameObject ControlsPanel;
 
-  public GameObject AchievementPanel;
-  
+    public GameObject AchievementPanel;
+    public GameObject HighscorePanel;
+    
+    void Start()
+    {
 
-  // Use this for initialization
-  void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-    GetComponent<AudioSource>().volume = PersistentData.Instance.SoundVal;
-	}
+    }
+    
+    void Update()
+    {
+        GetComponent<AudioSource>().volume = PersistentData.Instance.SoundVal;
+    }
 
-  public void StartGame()
-  {
-    SceneManager.LoadScene("Main");
-  }
+    public void StartGame()
+    {
+        SceneManager.LoadScene("Main");
+    }
 
-  public void Credits()
-  {
-    SetActiveFalse();
-    CreditsMenu.SetActive(true);
-  }
+    public void Credits()
+    {
+        SetActiveFalse();
+        CreditsMenu.SetActive(true);
+    }
 
-  public void Options()
-  {
-    SetActiveFalse();
-    OptionsMenu.SetActive(true);
+    public void Options()
+    {
+        SetActiveFalse();
+        OptionsMenu.SetActive(true);
 
-    SoundSlider.value = PersistentData.Instance.SoundVal;
-  }
+        SoundSlider.value = PersistentData.Instance.SoundVal;
+    }
 
-  public void MainMenuSet()
-  {
-    SetActiveFalse();
-    MainMenu.SetActive(true);
-    TitleImage.SetActive(true);
-  }
+    public void MainMenuSet()
+    {
+        SetActiveFalse();
+        MainMenu.SetActive(true);
+        TitleImage.SetActive(true);
+    }
 
-  public void SwitchControls()
-  {
-    SetActiveFalse();
-    ControlsPanel.SetActive(true);
-  }
+    public void SwitchControls()
+    {
+        SetActiveFalse();
+        ControlsPanel.SetActive(true);
+    }
 
-  public void ShowAchievements()
-  {
-    SetActiveFalse();
-    AchievementPanel.SetActive(true);
+    public void ShowAchievements()
+    {
+        SetActiveFalse();
+        AchievementPanel.SetActive(true);
         Image image = AchievementPanel.transform.Find(nameof(Component.FirstCloudAchievement)).GetComponent<Image>();
         Color tempColor = image.color;
         tempColor.a = PersistentData.Instance.AchievementController.FirstCloud ? 1f : 0.4f;
         image.color = tempColor;
     }
 
-  private void SetActiveFalse()
-  {
-    ControlsPanel.SetActive(false);
-    MainMenu.SetActive(false);
-    OptionsMenu.SetActive(false);
-    TitleImage.SetActive(false);
-    CreditsMenu.SetActive(false);
-    AchievementPanel.SetActive(false);
-  }
+    private void SetActiveFalse()
+    {
+        ControlsPanel.SetActive(false);
+        MainMenu.SetActive(false);
+        OptionsMenu.SetActive(false);
+        TitleImage.SetActive(false);
+        CreditsMenu.SetActive(false);
+        AchievementPanel.SetActive(false);
+        HighscorePanel.SetActive(false);
+    }
 
-  public void SetSoundLevel()
-  {
-    //Debug.Log("The current sound value: " + SoundSlider.value);
-    PersistentData.Instance.SoundVal = SoundSlider.value;
-  }
-  public void ExitGame()
-  {
-    Application.Quit();
-  }
+    public void SetSoundLevel()
+    {
+        PersistentData.Instance.SoundVal = SoundSlider.value;
+    }
+    public void ExitGame()
+    {
+        Application.Quit();
+    }
+
+    public void ShowHighscore()
+    {
+        SetActiveFalse();
+        HighscorePanel.SetActive(true);
+        HighscorePanel.GetComponent<HighScorePanel>().ReloadHighScore();
+    }
 }
