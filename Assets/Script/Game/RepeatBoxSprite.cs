@@ -1,7 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
+/// <summary>
+/// Ensures the background is repeated
+/// </summary>
 public class RepeatBoxSprite : MonoBehaviour
 {
 

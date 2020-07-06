@@ -29,7 +29,8 @@ public class Cloud : MonoBehaviour
             source.Play();
             // Add points
             GameController.Instance.IncreaseScore();
-            // TODO: render the sprite being smaller 
+
+            // TODO: render the sprite being smaller, That being render the change from on one sprite loop to another
             gameObject.GetComponent<SpriteRenderer>().enabled = false;
             gameObject.GetComponent<CircleCollider2D>().enabled = false;
 
