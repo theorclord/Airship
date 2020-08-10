@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class AchievementController
 {
-
+    // TODO propertyfy the streak
     private int streakCount;
     public int StreakCount
     {
@@ -19,13 +19,36 @@ public class AchievementController
         }
     }
     public bool InitStreakCount { get; set; }
-    public int Points { get; set; }
-
-
     public int LongestStreak
     {
         get;
         private set;
+    }
+
+
+    public int Points
+    {
+        get
+        {
+            return Properties[Property.Prop.Score].Value;
+        }
+        set
+        {
+            Properties[Property.Prop.Score].Value = value;
+        }
+    }
+    
+    // TODO split property and achievement part
+    public bool FirstCloud
+    {
+        get
+        {
+            return Properties[Property.Prop.FirstCloud].Value == 1;
+        }
+        set
+        {
+            Properties[Property.Prop.Score].Value = value == true ? 1 : 0;
+        }
     }
 
     // longest dodge
@@ -34,5 +57,23 @@ public class AchievementController
     //no cactch 
     //longest time no sky or rock
 
-    public bool FirstCloud { get; set; }
+    public Dictionary<Property.Prop, Property> Properties { get; private set; }
+
+    public AchievementController()
+    {
+        //TODO load properties from persisted data.
+        Properties = new Dictionary<Property.Prop,Property>();
+        var scoreProp = new Property()
+        {
+            EnumName = Property.Prop.Score,
+            Value = 0, // should be the persisted data
+        };
+        Properties.Add(Property.Prop.Score, scoreProp);
+        var firstProp = new Property()
+        {
+            EnumName = Property.Prop.FirstCloud,
+            Value = 0, // should be the persisted data
+        };
+        Properties.Add(Property.Prop.FirstCloud, firstProp);
+    }
 }

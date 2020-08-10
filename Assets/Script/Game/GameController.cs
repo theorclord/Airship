@@ -56,7 +56,6 @@ public class GameController : MonoBehaviour
         timeCloudLastSpawn = Time.time;
         acController = PersistentData.Instance.AchievementController;
         AudioSourceController.GetComponent<AudioSource>().volume = PersistentData.Instance.SoundVal;
-        //GameOverScreen.GetComponentInChildren<InputField>().OnSubmit
     }
 
     // Update is called once per frame
