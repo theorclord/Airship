@@ -9,7 +9,8 @@ public class Achievement
         FirstCloud
     }
 
-    private string Name { get; set; } // achievement name
+    private string Name { get; set; } // achievement name -> create from enum
+    //TODO add description for achievement
     private List<Property> Props { get; set; } // array of related properties
     private bool Unlocked { get; set; } // achievement is unlocked or not
  

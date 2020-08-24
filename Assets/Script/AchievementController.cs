@@ -4,50 +4,46 @@ using UnityEngine;
 
 public class AchievementController
 {
-    // TODO propertyfy the streak
     private int streakCount;
     public int StreakCount
     {
         get { return streakCount; }
         set
         {
-            if (streakCount > LongestStreak)
+            if (streakCount > PersistentData.Instance.Properties[Property.Prop.LongestCloudStreak].Value)
             {
-                LongestStreak = streakCount;
+                PersistentData.Instance.Properties[Property.Prop.LongestCloudStreak].Value = streakCount;
             }
             streakCount = value;
         }
     }
+
     public bool InitStreakCount { get; set; }
-    public int LongestStreak
-    {
-        get;
-        private set;
-    }
 
-
-    public int Points
+    public int PersistentedPoints
     {
         get
         {
-            return Properties[Property.Prop.Score].Value;
+            return PersistentData.Instance.Properties[Property.Prop.HighestScore].Value;
         }
         set
         {
-            Properties[Property.Prop.Score].Value = value;
+            if (PersistentData.Instance.Properties[Property.Prop.HighestScore].Value < value)
+            {
+                PersistentData.Instance.Properties[Property.Prop.HighestScore].Value = value;
+            }
         }
     }
     
-    // TODO split property and achievement part
     public bool FirstCloud
     {
         get
         {
-            return Properties[Property.Prop.FirstCloud].Value == 1;
+            return PersistentData.Instance.Properties[Property.Prop.FirstCloud].Value == 1;
         }
         set
         {
-            Properties[Property.Prop.Score].Value = value == true ? 1 : 0;
+            PersistentData.Instance.Properties[Property.Prop.FirstCloud].Value = value == true ? 1 : 0;
         }
     }
 
@@ -57,23 +53,8 @@ public class AchievementController
     //no cactch 
     //longest time no sky or rock
 
-    public Dictionary<Property.Prop, Property> Properties { get; private set; }
-
     public AchievementController()
     {
-        //TODO load properties from persisted data.
-        Properties = new Dictionary<Property.Prop,Property>();
-        var scoreProp = new Property()
-        {
-            EnumName = Property.Prop.Score,
-            Value = 0, // should be the persisted data
-        };
-        Properties.Add(Property.Prop.Score, scoreProp);
-        var firstProp = new Property()
-        {
-            EnumName = Property.Prop.FirstCloud,
-            Value = 0, // should be the persisted data
-        };
-        Properties.Add(Property.Prop.FirstCloud, firstProp);
+        new Achievement("First Cloud", new List<Property>() { PersistentData.Instance.Properties[Property.Prop.FirstCloud] });
     }
 }

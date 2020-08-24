@@ -20,21 +20,24 @@ public class GameController : MonoBehaviour
     public GameObject LivesText;
     public GameObject Menu;
 
+    //game controller variables
     private float timeCloudLastSpawn;
     private float timeRockLastSpawn;
 
     public float CurrentSpeedModifier;
-
     private int lives = 3;
+    private bool HighscoreSaved = false;
+    public bool GameOver = false;
+    private int currentScore = 0;
+
+    // constants
     private readonly float speedFactor = 10f;
     private readonly float spawnX = 25f;
     private float rockSpawnFrequency = 2f;
     private float cloudSpawnFrequency = 1f;
-    private readonly float maxSpeed = 20f;
-    private bool HighscoreSaved = false;
-
-    public bool GameOver = false;
+    private readonly float maxSpeed = 30f;
     public float BackgroundSpeed = 2f;
+    
     public static GameController Instance { get; set; }
 
     private AchievementController acController;
@@ -100,14 +103,14 @@ public class GameController : MonoBehaviour
     {
         if (!GameOver)
         {
-            acController.Points += 100;
+            currentScore += 100;
+            acController.PersistentedPoints = currentScore;
             if (!acController.FirstCloud)
             {
                 acController.FirstCloud = true;
             }
-            ScoreText.GetComponent<Text>().text = "Score: " + acController.Points;
+            ScoreText.GetComponent<Text>().text = "Score: " + currentScore;
             acController.StreakCount++;
-            // call achievement controller
         }
     }
 
@@ -134,12 +137,12 @@ public class GameController : MonoBehaviour
         HighscoreEntry hsEntry = new HighscoreEntry()
         {
             Date = DateTime.Now,
-            Score = acController.Points,
+            Score = currentScore,
             Time = Time.time
         };
         PersistentData.Instance.CurrentHighscoreEntry = hsEntry;
         PersistentData.Instance.HighScoreList.Add(hsEntry);
-        GameOverScreen.transform.GetChild(1).GetComponent<Text>().text = "Score: " + acController.Points;
+        GameOverScreen.transform.GetChild(1).GetComponent<Text>().text = "Score: " + currentScore;
         GameOverScreen.transform.GetChild(2).GetComponent<Text>().text = "Time: " + Time.time;
         // call achievement controller
     }

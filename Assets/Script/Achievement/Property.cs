@@ -10,8 +10,8 @@ public class Property
     // This should be a complete list of all the properties in the game
     public enum Prop
     {
-        Score = 100,
-        CloudStreak = 200,
+        HighestScore = 100,
+        LongestCloudStreak = 200,
         FirstCloud = 300,
     }
 

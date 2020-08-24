@@ -44,6 +44,19 @@ public class PersistentData : MonoBehaviour
         }
     }
 
+    private Dictionary<Property.Prop, Property> _properties;
+    public Dictionary<Property.Prop, Property> Properties
+    {
+        get
+        {
+            if (_properties == null)
+            {
+                LoadPropertyData();
+            }
+            return _properties;
+        }
+    }
+
     public static PersistentData Instance { get; set; }
     void Awake()
     {
@@ -100,5 +113,53 @@ public class PersistentData : MonoBehaviour
         stream.Close();
         
         HighScoreList = loadedObj != null ? (List<HighscoreEntry>)loadedObj : new List<HighscoreEntry>();
+    }
+
+    private void SavePropertyData()
+    {
+        BinaryFormatter binFormatter = new BinaryFormatter();
+        FileStream stream = new FileStream(Application.persistentDataPath + @"\Property.bin", FileMode.OpenOrCreate, FileAccess.Write);
+        binFormatter.Serialize(stream, Properties);
+        stream.Close();
+    }
+
+    private void LoadPropertyData()
+    {
+        BinaryFormatter binFormatter = new BinaryFormatter();
+        FileStream stream = new FileStream(Application.persistentDataPath + @"\Property.bin", FileMode.OpenOrCreate, FileAccess.Read);
+        object loadedObj = null;
+        if (stream.Length > 0)
+        {
+            loadedObj = binFormatter.Deserialize(stream);
+        }
+        stream.Close();
+        _properties = loadedObj != null ? (Dictionary<Property.Prop, Property>)loadedObj : new Dictionary<Property.Prop, Property>();
+        if (!Properties.ContainsKey(Property.Prop.FirstCloud))
+        {
+            var firstProp = new Property()
+            {
+                EnumName = Property.Prop.FirstCloud,
+                Value = 0,
+            };
+            Properties.Add(Property.Prop.FirstCloud, firstProp);
+        }
+        if(!Properties.ContainsKey(Property.Prop.HighestScore))
+        {
+            var scoreProp = new Property()
+            {
+                EnumName = Property.Prop.HighestScore,
+                Value = 0,
+            };
+            Properties.Add(Property.Prop.HighestScore, scoreProp);
+        }
+        if (!Properties.ContainsKey(Property.Prop.LongestCloudStreak))
+        {
+            var streakProp = new Property()
+            {
+                EnumName = Property.Prop.LongestCloudStreak,
+                Value = 0,
+            };
+            Properties.Add(Property.Prop.LongestCloudStreak, streakProp);
+        }
     }
 }
