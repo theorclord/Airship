@@ -5,7 +5,7 @@ using UnityEngine;
 public class Cloud : MonoBehaviour
 {
 
-    private float cloudSpeed = 0.1f;
+    private float cloudSpeed = 0.02f;
     // Use this for initialization
     void Start()
     {

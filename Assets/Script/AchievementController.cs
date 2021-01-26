@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Achievement;
 
 public class AchievementController
 {
@@ -53,8 +54,13 @@ public class AchievementController
     //no cactch 
     //longest time no sky or rock
 
+    public Dictionary<Achieve, Achievement> Achievements { get; set; }
+
     public AchievementController()
     {
-        new Achievement("First Cloud", new List<Property>() { PersistentData.Instance.Properties[Property.Prop.FirstCloud] });
+        Achievements = new Dictionary<Achieve, Achievement>
+        {
+            { Achieve.FirstCloud, new Achievement("First Cloud", new Dictionary<AchieveCompareType, Property>() { { AchieveCompareType.greater, PersistentData.Instance.Properties[Property.Prop.FirstCloud] } }) }
+        };
     }
 }

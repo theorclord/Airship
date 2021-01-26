@@ -13,6 +13,19 @@ public class PersistentData : MonoBehaviour
 
     #region BinaryPersistence
     public List<HighscoreEntry> HighScoreList { get; set; }
+
+    private Dictionary<Property.Prop, Property> _properties;
+    public Dictionary<Property.Prop, Property> Properties
+    {
+        get
+        {
+            if (_properties == null)
+            {
+                LoadPropertyData();
+            }
+            return _properties;
+        }
+    }
     #endregion
 
     #region PlayerPrefs
@@ -41,19 +54,6 @@ public class PersistentData : MonoBehaviour
                 _achievementController = new AchievementController();
             }
             return _achievementController;
-        }
-    }
-
-    private Dictionary<Property.Prop, Property> _properties;
-    public Dictionary<Property.Prop, Property> Properties
-    {
-        get
-        {
-            if (_properties == null)
-            {
-                LoadPropertyData();
-            }
-            return _properties;
         }
     }
 

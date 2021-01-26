@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     //TODO Move to const class
-    private readonly float speed = 0.15f;
+    private readonly float speed = 0.03f;
     private readonly float spriteSize = 40f;
     // Use this for initialization
     void Start()
