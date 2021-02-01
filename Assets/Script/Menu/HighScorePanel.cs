@@ -23,7 +23,6 @@ public class HighScorePanel : MonoBehaviour
 
     public void ReloadHighScore()
     {
-        
         for(int i =0;i<PersistentData.Instance.HighScoreList.Count;i++)
         {
             var highscoreEntry = PersistentData.Instance.HighScoreList[i];

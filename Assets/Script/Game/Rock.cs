@@ -1,11 +1,10 @@
-﻿using System.Collections;
+﻿using Assets.Script.Data;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Rock : MonoBehaviour
 {
-
-    private float rockSpeed = 0.01f;
     // Use this for initialization
     void Start()
     {
@@ -17,13 +16,13 @@ public class Rock : MonoBehaviour
     {
         if (!PersistentData.Instance.Pause)
         {
-            transform.Translate(new Vector3(-1 * rockSpeed * GameController.Instance.CurrentSpeedModifier, 0));
+            transform.Translate(new Vector3(-1 * Constants.RockSpeed * GameController.Instance.CurrentSpeedModifier, 0));
         }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.name == "Airship")
+        if (collision.gameObject.name == Constants.PlayerObjectName)
         {
             // Deal damage to airship
             GameController.Instance.DescreaseLives();
