@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
+﻿using Assets.Script.Data;
+using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -25,18 +22,12 @@ public class GameController : MonoBehaviour
     private float timeRockLastSpawn;
 
     public float CurrentSpeedModifier;
-    private int lives = 3;
+    private float CurrentRockSpawnFrequency;
+    private float CurrentCloudSpawnFrequency;
+    private int lives = Constants.StartingLives;
     private bool HighscoreSaved = false;
     public bool GameOver = false;
     private int currentScore = 0;
-
-    // constants
-    private readonly float speedFactor = 10f;
-    private readonly float spawnX = 25f;
-    private float rockSpawnFrequency = 2f;
-    private float cloudSpawnFrequency = 1f;
-    private readonly float maxSpeed = 30f;
-    public float BackgroundSpeed = 2f;
     
     public static GameController Instance { get; set; }
 
@@ -56,6 +47,7 @@ public class GameController : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        LivesText.GetComponent<Text>().text = "Lives: " + lives;
         timeCloudLastSpawn = Time.time;
         acController = PersistentData.Instance.AchievementController;
         AudioSourceController.GetComponent<AudioSource>().volume = PersistentData.Instance.SoundVal;
@@ -66,22 +58,22 @@ public class GameController : MonoBehaviour
     {
         if (!GameOver && !PersistentData.Instance.Pause)
         {
-            if (Time.time - timeCloudLastSpawn > cloudSpawnFrequency)
+            if (Time.time - timeCloudLastSpawn > Constants.CloudSpawnFrequency)
             {
                 timeCloudLastSpawn = Time.time;
-                Instantiate(Cloud, new Vector3(spawnX, UnityEngine.Random.Range(-10f, 10f)), Quaternion.identity);
+                Instantiate(Cloud, new Vector3(Constants.SpawnX, UnityEngine.Random.Range(-10f, 10f)), Quaternion.identity);
             }
 
-            if (Time.time - timeRockLastSpawn > rockSpawnFrequency)
+            if (Time.time - timeRockLastSpawn > CurrentRockSpawnFrequency)
             {
                 timeRockLastSpawn = Time.time;
-                Instantiate(Rock, new Vector3(spawnX, UnityEngine.Random.Range(-10f, 10f)), Quaternion.identity);
+                Instantiate(Rock, new Vector3(Constants.SpawnX, UnityEngine.Random.Range(-10f, 10f)), Quaternion.identity);
             }
 
             // Speed up the game
-            CurrentSpeedModifier = 1 + Mathf.Clamp(Mathf.Floor(Time.time / speedFactor) / 10, 0, maxSpeed);
-            rockSpawnFrequency = 2f / CurrentSpeedModifier;
-            cloudSpawnFrequency = 1f / CurrentSpeedModifier;
+            CurrentSpeedModifier = 1 + Mathf.Clamp(Mathf.Floor(Time.time / Constants.SpeedFactor) / 10, 0, Constants.MaxSpeed);
+            CurrentRockSpawnFrequency = Constants.RockSpawnFrequency / CurrentSpeedModifier;
+            CurrentCloudSpawnFrequency = Constants.CloudSpawnFrequency / CurrentSpeedModifier;
         }
         if (Input.GetKeyDown(KeyCode.P) || Input.GetKeyDown(KeyCode.Pause))
         {

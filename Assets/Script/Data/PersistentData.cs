@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using Assets.Script.Data;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Text;
 using UnityEngine;
 
 public class PersistentData : MonoBehaviour
@@ -96,7 +96,7 @@ public class PersistentData : MonoBehaviour
     public void SaveHighscoreData()
     {
         BinaryFormatter binFormatter = new BinaryFormatter();
-        FileStream stream = new FileStream(Application.persistentDataPath + @"\highscore.bin", FileMode.OpenOrCreate, FileAccess.Write);
+        FileStream stream = new FileStream(Application.persistentDataPath + Constants.HighscorePath, FileMode.OpenOrCreate, FileAccess.Write);
         binFormatter.Serialize(stream, HighScoreList);
         stream.Close();
     }
@@ -104,7 +104,7 @@ public class PersistentData : MonoBehaviour
     private void LoadHighscoreData()
     {
         BinaryFormatter binFormatter = new BinaryFormatter();
-        FileStream stream = new FileStream(Application.persistentDataPath + @"\highscore.bin", FileMode.OpenOrCreate, FileAccess.Read);
+        FileStream stream = new FileStream(Application.persistentDataPath + Constants.HighscorePath, FileMode.OpenOrCreate, FileAccess.Read);
         object loadedObj = null;
         if(stream.Length > 0)
         {
@@ -118,7 +118,7 @@ public class PersistentData : MonoBehaviour
     private void SavePropertyData()
     {
         BinaryFormatter binFormatter = new BinaryFormatter();
-        FileStream stream = new FileStream(Application.persistentDataPath + @"\Property.bin", FileMode.OpenOrCreate, FileAccess.Write);
+        FileStream stream = new FileStream(Application.persistentDataPath + Constants.PropertyPath, FileMode.OpenOrCreate, FileAccess.Write);
         binFormatter.Serialize(stream, Properties);
         stream.Close();
     }
@@ -126,7 +126,7 @@ public class PersistentData : MonoBehaviour
     private void LoadPropertyData()
     {
         BinaryFormatter binFormatter = new BinaryFormatter();
-        FileStream stream = new FileStream(Application.persistentDataPath + @"\Property.bin", FileMode.OpenOrCreate, FileAccess.Read);
+        FileStream stream = new FileStream(Application.persistentDataPath + Constants.PropertyPath, FileMode.OpenOrCreate, FileAccess.Read);
         object loadedObj = null;
         if (stream.Length > 0)
         {

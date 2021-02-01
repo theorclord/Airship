@@ -1,10 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using Assets.Script.Data;
 using UnityEngine;
 
 public class Border : MonoBehaviour
 {
-
     // Use this for initialization
     void Start()
     {
@@ -19,7 +17,7 @@ public class Border : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.name != "Airship")
+        if (collision.gameObject.name != Constants.PlayerObjectName)
         {
             if (collision.gameObject.name == "Cloud(Clone)")
                 GameController.Instance.CloudMissed();
