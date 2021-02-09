@@ -101,6 +101,6 @@ public class MenuController : MonoBehaviour
     {
         SetActiveFalse();
         HighscorePanel.SetActive(true);
-        HighscorePanel.GetComponent<HighScorePanel>().ReloadHighScore();
+        HighscorePanel.GetComponentInChildren<HighScorePanel>().LoadHighScore();
     }
 }

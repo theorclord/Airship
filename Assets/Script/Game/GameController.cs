@@ -126,14 +126,14 @@ public class GameController : MonoBehaviour
         HighscoreSaved = false;
         GameOver = true;
         GameOverScreen.SetActive(true);
-        HighscoreEntry hsEntry = new HighscoreEntry()
+        HighScoreEntry hsEntry = new HighScoreEntry()
         {
             Date = DateTime.Now,
             Score = currentScore,
             Time = Time.time
         };
         PersistentData.Instance.CurrentHighscoreEntry = hsEntry;
-        PersistentData.Instance.HighScoreList.Add(hsEntry);
+        
         GameOverScreen.transform.GetChild(1).GetComponent<Text>().text = "Score: " + currentScore;
         GameOverScreen.transform.GetChild(2).GetComponent<Text>().text = "Time: " + Time.time;
         // call achievement controller
@@ -160,6 +160,7 @@ public class GameController : MonoBehaviour
         if (!HighscoreSaved)
         {
             PersistentData.Instance.CurrentHighscoreEntry.Name = name.text;
+            PersistentData.Instance.AddHighscoreEntry(PersistentData.Instance.CurrentHighscoreEntry);
             PersistentData.Instance.SaveHighscoreData();
             HighscoreSaved = true;
         }

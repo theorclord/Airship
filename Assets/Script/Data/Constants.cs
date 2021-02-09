@@ -26,6 +26,8 @@ namespace Assets.Script.Data
         public const float BackgroundSpeed = 2f;
         public const int StartingLives = 3;
 
+        public const int NumberHighscoreEntries = 10;
+
         // player constants
         public const float PlayerSpeed = 0.03f;
         public const float PlayerSpriteSize = 40f;

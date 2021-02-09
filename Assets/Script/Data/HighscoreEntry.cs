@@ -1,7 +1,7 @@
 ﻿using System;
 
 [Serializable]
-public class HighscoreEntry
+public class HighScoreEntry
 {
     public string Name { get; set; }
     public int Score { get; set; }
