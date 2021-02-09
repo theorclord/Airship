@@ -28,6 +28,8 @@ public class GameController : MonoBehaviour
     private bool HighscoreSaved = false;
     public bool GameOver = false;
     private int currentScore = 0;
+
+    private float TimeInitial;
     
     public static GameController Instance { get; set; }
 
@@ -48,7 +50,7 @@ public class GameController : MonoBehaviour
     void Start()
     {
         LivesText.GetComponent<Text>().text = "Lives: " + lives;
-        timeCloudLastSpawn = Time.time;
+        TimeInitial = Time.time;
         acController = PersistentData.Instance.AchievementController;
         AudioSourceController.GetComponent<AudioSource>().volume = PersistentData.Instance.SoundVal;
     }
@@ -71,7 +73,7 @@ public class GameController : MonoBehaviour
             }
 
             // Speed up the game
-            CurrentSpeedModifier = 1 + Mathf.Clamp(Mathf.Floor(Time.time / Constants.SpeedFactor) / 10, 0, Constants.MaxSpeed);
+            CurrentSpeedModifier = 1 + Mathf.Clamp(Mathf.Floor((Time.time- TimeInitial) / Constants.SpeedFactor) / 10, 0, Constants.MaxSpeed);
             CurrentRockSpawnFrequency = Constants.RockSpawnFrequency / CurrentSpeedModifier;
             CurrentCloudSpawnFrequency = Constants.CloudSpawnFrequency / CurrentSpeedModifier;
         }

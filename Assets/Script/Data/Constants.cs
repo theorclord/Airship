@@ -18,7 +18,7 @@ namespace Assets.Script.Data
 
         // game constants
         public const float CloudSpeed = 0.02f;
-        public const float SpeedFactor = 10f;
+        public const float SpeedFactor = 5f;
         public const float SpawnX = 25f; // the value of x for the spawning of new objects for the game
         public const float RockSpawnFrequency = 2f;
         public const float CloudSpawnFrequency = 1f;
