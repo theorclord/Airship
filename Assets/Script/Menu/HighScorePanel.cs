@@ -7,8 +7,9 @@ public class HighScorePanel : MonoBehaviour
 {
     public enum HighscoreEntyComponents
     {
-        Name= 0, Score = 1, Time = 2, Date = 3,
+        Name = 0, Score = 1, Time = 2, Date = 3,
     }
+    public GameObject ConfirmationDialog;
     // Start is called before the first frame update
     void Start()
     {
@@ -21,18 +22,53 @@ public class HighScorePanel : MonoBehaviour
         
     }
 
-    public void ReloadHighScore()
+    public void ResetHighscore()
     {
-        for(int i =0;i<PersistentData.Instance.HighScoreList.Count;i++)
+        // Show confirmation box
+        ConfirmationDialog.SetActive(true);
+    }
+
+    public void ConfirmReset(bool clear)
+    {
+        // Reset the two highscore lists
+        if (clear)
         {
-            var highscoreEntry = PersistentData.Instance.HighScoreList[i];
+            PersistentData.Instance.ClearHighScore();
+        }
+        transform.GetComponentInChildren<HighScoreScorePanel>().ReloadHighScore();
+        transform.GetComponentInChildren<HighScoreTimePanel>().ReloadHighScore();
+        // close the dialog panel
+        ConfirmationDialog.SetActive(false);
+    }
+
+    public void LoadHighScore()
+    {
+        transform.GetComponentInChildren<HighScoreScorePanel>().ReloadHighScore();
+        transform.GetComponentInChildren<HighScoreTimePanel>().ReloadHighScore();
+    }
+
+    public static void ReloadHighScore(List<HighScoreEntry> scoreEntries, Transform containerTransform)
+    {
+        // Clear existing children
+        List<GameObject> highscoreEntries = new List<GameObject>();
+        for (int i = 0; i < containerTransform.childCount; i++)
+        {
+            highscoreEntries.Add(containerTransform.GetChild(i).gameObject);
+        }
+        foreach (GameObject go in highscoreEntries)
+        {
+            Destroy(go);
+        }
+
+        for (int i = 0; i < scoreEntries.Count; i++)
+        {
+            var highscoreEntry = scoreEntries[i];
             // spawn new highscore prefab
-            var hsEntry = Instantiate(Resources.Load("HighscoreEntry"), transform, false) as GameObject;
+            var hsEntry = Instantiate(Resources.Load("HighscoreEntry"), containerTransform) as GameObject;
             hsEntry.transform.GetChild((int)HighscoreEntyComponents.Name).GetComponent<Text>().text = highscoreEntry.Name;
             hsEntry.transform.GetChild((int)HighscoreEntyComponents.Score).GetComponent<Text>().text = highscoreEntry.Score.ToString();
             hsEntry.transform.GetChild((int)HighscoreEntyComponents.Time).GetComponent<Text>().text = highscoreEntry.Time.ToString();
             hsEntry.transform.GetChild((int)HighscoreEntyComponents.Date).GetComponent<Text>().text = highscoreEntry.Date.ToString("yyyy-MM-dd HH:MM");
-            hsEntry.transform.position = new Vector3(hsEntry.transform.position.x, hsEntry.transform.position.y - 55*i, hsEntry.transform.position.z);
         }
     }
 }

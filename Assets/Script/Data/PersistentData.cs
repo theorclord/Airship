@@ -1,6 +1,8 @@
 ﻿using Assets.Script.Data;
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 
@@ -8,11 +10,13 @@ public class PersistentData : MonoBehaviour
 {
     #region IngamgeVariables
     public bool Pause { get; set; }
-    public HighscoreEntry CurrentHighscoreEntry { get; set; }
+    public HighScoreEntry CurrentHighscoreEntry { get; set; }
     #endregion
 
     #region BinaryPersistence
-    public List<HighscoreEntry> HighScoreList { get; set; }
+    // the two lists are saved in a common object on serialization to only have one object
+    public List<HighScoreEntry> HighscoreEntriesTime { get; set; }
+    public List<HighScoreEntry> HighscoreEntriesScore { get; set; }
 
     private Dictionary<Property.Prop, Property> _properties;
     public Dictionary<Property.Prop, Property> Properties
@@ -93,27 +97,88 @@ public class PersistentData : MonoBehaviour
 
     }
 
+    #region highScore
+    public void AddHighscoreEntry(HighScoreEntry highscoreEntry)
+    {
+        // handle the score addition
+        if(HighscoreEntriesScore.Count < Constants.NumberHighscoreEntries)
+        {
+            HighscoreEntriesScore.Add(highscoreEntry);
+            HighscoreEntriesScore = HighscoreEntriesScore.OrderByDescending(h => h.Score).ToList();
+        } else
+        {
+            var lowerEntryExist = HighscoreEntriesScore.Last().Score < highscoreEntry.Score;
+            if(lowerEntryExist)
+            {
+                HighscoreEntriesScore.Add(highscoreEntry);
+                HighscoreEntriesScore = HighscoreEntriesScore.OrderByDescending(h => h.Score).ToList();
+                HighscoreEntriesScore.Remove(HighscoreEntriesScore.Last());
+            }
+        }
+
+        // Handle the time addition
+        if (HighscoreEntriesTime.Count < Constants.NumberHighscoreEntries)
+        {
+            HighscoreEntriesTime.Add(highscoreEntry);
+            HighscoreEntriesTime = HighscoreEntriesTime.OrderByDescending(h => h.Time).ToList();
+        }
+        else
+        {
+            var lowerEntryExist = HighscoreEntriesTime.Last().Time < highscoreEntry.Time;
+            if (lowerEntryExist)
+            {
+                HighscoreEntriesTime.Add(highscoreEntry);
+                HighscoreEntriesTime = HighscoreEntriesTime.OrderByDescending(h => h.Time).ToList();
+                HighscoreEntriesTime.Remove(HighscoreEntriesTime.Last());
+            }
+        }
+    }
+
+
     public void SaveHighscoreData()
     {
         BinaryFormatter binFormatter = new BinaryFormatter();
         FileStream stream = new FileStream(Application.persistentDataPath + Constants.HighscorePath, FileMode.OpenOrCreate, FileAccess.Write);
-        binFormatter.Serialize(stream, HighScoreList);
+        List<List<HighScoreEntry>> highScores = new List<List<HighScoreEntry>>() { HighscoreEntriesScore, HighscoreEntriesTime };
+        binFormatter.Serialize(stream, highScores);
         stream.Close();
     }
 
     private void LoadHighscoreData()
     {
-        BinaryFormatter binFormatter = new BinaryFormatter();
-        FileStream stream = new FileStream(Application.persistentDataPath + Constants.HighscorePath, FileMode.OpenOrCreate, FileAccess.Read);
-        object loadedObj = null;
-        if(stream.Length > 0)
-        {
-            loadedObj = binFormatter.Deserialize(stream);
-        }
-        stream.Close();
+        List<List<HighScoreEntry>> highScores = new List<List<HighScoreEntry>>() { new List<HighScoreEntry>(), new List<HighScoreEntry>() };
         
-        HighScoreList = loadedObj != null ? (List<HighscoreEntry>)loadedObj : new List<HighscoreEntry>();
+        try
+        {
+            BinaryFormatter binFormatter = new BinaryFormatter();
+            FileStream stream = new FileStream(Application.persistentDataPath + Constants.HighscorePath, FileMode.OpenOrCreate, FileAccess.Read);
+            object loadedObj = null;
+            if (stream.Length > 0)
+            {
+                loadedObj = binFormatter.Deserialize(stream);
+            }
+            stream.Close();
+            highScores = (List<List<HighScoreEntry>>)loadedObj;
+        }
+        catch (Exception e)
+        {
+            Debug.Log(e.Message);
+            Debug.Log("Unable to parse saved highscores");
+        }
+        
+        var HighScoreLists = highScores;
+        HighscoreEntriesScore = HighScoreLists[0];
+        HighscoreEntriesTime = HighScoreLists[1];
     }
+
+    public void ClearHighScore()
+    {
+        HighscoreEntriesScore = new List<HighScoreEntry>();
+        HighscoreEntriesTime = new List<HighScoreEntry>();
+        SaveHighscoreData();
+        LoadHighscoreData();
+    }
+    #endregion
 
     private void SavePropertyData()
     {
