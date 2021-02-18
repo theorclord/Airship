@@ -1,4 +1,5 @@
 ﻿using Assets.Script.Achievement;
+using Assets.Script.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +18,8 @@ public class AchievementController
     // TODO check if this is necessary to use
     public enum Achieve
     {
-        FirstCloud
+        FirstCloud,
+        Score500
     }
 
     public enum AchieveCompareType
@@ -52,7 +54,7 @@ public class AchievementController
         {
             if (PersistentData.Instance.Properties[Prop.HighestScore].Value < value)
             {
-                PersistentData.Instance.Properties[Prop.HighestScore].Value = value;
+                UpdateProperty(Prop.HighestScore, value);
             }
         }
     }
@@ -80,7 +82,7 @@ public class AchievementController
     public List<Achievement> UpdateProperty(Prop propType, int value) // 2020-02-18 mist: perhaps change the value to an object to enable more complex properties
     {
         PersistentData.Instance.Properties[propType].Value = value;
-        PersistentData.Instance.SavePropertyData();
+        PersistentData.Instance.SaveData(PersistentData.Instance.Properties, Constants.PropertyPath);
 
         // check all achivements with this property
         var eligibleAch = PersistentData.Instance.Achievements.Where(a => a.Value.PropRelations.FindIndex(prop => prop.PropertyType == propType) >= 0);
@@ -96,7 +98,7 @@ public class AchievementController
                 if (isValid)
                 {
                     ach.Value.UnlockedDate = DateTime.Now;
-                    PersistentData.Instance.SaveAchievementData();
+                    PersistentData.Instance.SaveData(PersistentData.Instance.Achievements, Constants.AchievementPath);
                     newlyValidAchiements.Add(ach.Value);
                 }
             }

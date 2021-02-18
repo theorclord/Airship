@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -6,7 +7,7 @@ public class MenuController : MonoBehaviour
 {
     public enum Component
     {
-        FirstCloudAchievement
+        AchievementGrid
     }
 
     public GameObject TitleImage;
@@ -70,11 +71,19 @@ public class MenuController : MonoBehaviour
         SetActiveFalse();
         AchievementPanel.SetActive(true);
 
-        // TODO load the achievements and images from the achievement controllers achievement list
-        Image image = AchievementPanel.transform.Find(nameof(Component.FirstCloudAchievement)).GetComponent<Image>();
-        Color tempColor = image.color;
-        tempColor.a = PersistentData.Instance.Achievements[AchievementController.Achieve.FirstCloud].Validate() ? 1f : 0.4f;
-        image.color = tempColor;
+        // load the achievements and images from the achievement controllers achievement list
+        foreach(var ach in PersistentData.Instance.Achievements)
+        {
+            var containerTransform = AchievementPanel.transform.Find(nameof(Component.AchievementGrid));
+            var achievementMenuItem = Instantiate(Resources.Load("MenuAchievement"), containerTransform) as GameObject;
+            var achievementSprite = Resources.Load<Sprite>(ach.Value.SpriteName);
+            var achievementImage = achievementMenuItem.GetComponent<Image>();
+            achievementImage.sprite = achievementSprite;
+
+            Color achColor = achievementImage.color;
+            achColor.a = ach.Value.UnlockedDate != DateTime.MinValue ? 1f : 0.4f;
+            achievementImage.color = achColor;
+        }
     }
 
     private void SetActiveFalse()

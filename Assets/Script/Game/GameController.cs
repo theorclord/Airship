@@ -100,8 +100,10 @@ public class GameController : MonoBehaviour
         {
             currentScore += 100;
             acController.PersistentedPoints = currentScore;
-            var newAchievements = acController.UpdateProperty(Prop.FirstCloud, 1);
+            var newAchievements = acController.UpdateProperty(Prop.HighestScore, currentScore);
+            var newAchievements1 = acController.UpdateProperty(Prop.FirstCloud, 1);
             // 2020-02-18 TODO: display the new achievements on screen.
+
             ScoreText.GetComponent<Text>().text = "Score: " + currentScore;
             acController.StreakCount++;
         }
