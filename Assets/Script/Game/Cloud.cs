@@ -1,11 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using Assets.Script.Data;
 using UnityEngine;
 
 public class Cloud : MonoBehaviour
 {
-
-    private float cloudSpeed = 0.02f;
     // Use this for initialization
     void Start()
     {
@@ -17,13 +14,13 @@ public class Cloud : MonoBehaviour
     {
         if (!PersistentData.Instance.Pause)
         {
-            transform.Translate(new Vector3(-1 * cloudSpeed * GameController.Instance.CurrentSpeedModifier, 0));
+            transform.Translate(new Vector3(-1 * Constants.CloudSpeed * GameController.Instance.CurrentSpeedModifier, 0));
         }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.name == "Airship")
+        if (collision.gameObject.name == Constants.PlayerObjectName)
         {
             AudioSource source = GetComponent<AudioSource>();
             source.Play();
