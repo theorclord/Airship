@@ -58,7 +58,12 @@ public class AchievementController
     {
         Achievements = new Dictionary<Achieve, Achievement>
         {
-            { Achieve.FirstCloud, new Achievement("First Cloud", new Dictionary<AchieveCompareType, Property>() { { AchieveCompareType.greater, PersistentData.Instance.Properties[Property.Prop.FirstCloud] } }) }
+            { Achieve.FirstCloud,
+                new Achievement("First Cloud", 
+                    new Dictionary<AchieveCompareType, Property>()
+                    { { AchieveCompareType.greater, PersistentData.Instance.Properties[Property.Prop.FirstCloud] } }
+                )
+            },
         };
     }
 }
