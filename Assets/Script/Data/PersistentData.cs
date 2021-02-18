@@ -1,10 +1,12 @@
-﻿using Assets.Script.Data;
+﻿using Assets.Script.Achievement;
+using Assets.Script.Data;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
+using static AchievementController;
 
 public class PersistentData : MonoBehaviour
 {
@@ -17,19 +19,14 @@ public class PersistentData : MonoBehaviour
     // the two lists are saved in a common object on serialization to only have one object
     public List<HighScoreEntry> HighscoreEntriesTime { get; set; }
     public List<HighScoreEntry> HighscoreEntriesScore { get; set; }
-
-    private Dictionary<Property.Prop, Property> _properties;
-    public Dictionary<Property.Prop, Property> Properties
+    
+    public Dictionary<Prop, Property> Properties
     {
-        get
-        {
-            if (_properties == null)
-            {
-                LoadPropertyData();
-            }
-            return _properties;
-        }
+        get;
+        private set;
     }
+
+    public Dictionary<Achieve, Achievement> Achievements { get; set; }
     #endregion
 
     #region PlayerPrefs
@@ -82,9 +79,12 @@ public class PersistentData : MonoBehaviour
         SoundVal = PlayerPrefs.GetFloat(nameof(SoundVal), 1);
         
         LoadHighscoreData();
+        LoadPropertyData();
+        LoadAchievementData();
 
         _achievementController = new AchievementController();
     }
+
     // Use this for initialization
     void Start()
     {
@@ -97,7 +97,7 @@ public class PersistentData : MonoBehaviour
 
     }
 
-    #region highScore
+    #region HighScore
     public void AddHighscoreEntry(HighScoreEntry highscoreEntry)
     {
         // handle the score addition
@@ -180,7 +180,8 @@ public class PersistentData : MonoBehaviour
     }
     #endregion
 
-    private void SavePropertyData()
+    #region PropertyData
+    public void SavePropertyData()
     {
         BinaryFormatter binFormatter = new BinaryFormatter();
         FileStream stream = new FileStream(Application.persistentDataPath + Constants.PropertyPath, FileMode.OpenOrCreate, FileAccess.Write);
@@ -190,41 +191,101 @@ public class PersistentData : MonoBehaviour
 
     private void LoadPropertyData()
     {
-        BinaryFormatter binFormatter = new BinaryFormatter();
-        FileStream stream = new FileStream(Application.persistentDataPath + Constants.PropertyPath, FileMode.OpenOrCreate, FileAccess.Read);
-        object loadedObj = null;
-        if (stream.Length > 0)
+        // load the properties
+        try
         {
-            loadedObj = binFormatter.Deserialize(stream);
+            BinaryFormatter binFormatter = new BinaryFormatter();
+            FileStream stream = new FileStream(Application.persistentDataPath + Constants.PropertyPath, FileMode.OpenOrCreate, FileAccess.Read);
+            object loadedObj = null;
+            if (stream.Length > 0)
+            {
+                loadedObj = binFormatter.Deserialize(stream);
+            }
+            stream.Close();
+            Properties = loadedObj != null ? (Dictionary<Prop, Property>)loadedObj : new Dictionary<Prop, Property>();
         }
-        stream.Close();
-        _properties = loadedObj != null ? (Dictionary<Property.Prop, Property>)loadedObj : new Dictionary<Property.Prop, Property>();
-        if (!Properties.ContainsKey(Property.Prop.FirstCloud))
+        catch (Exception e)
+        {
+            Debug.Log(e.Message);
+            Debug.Log("Unable to parse existing properties");
+        }
+
+        // ensure properties exist.
+        if (!Properties.ContainsKey(Prop.FirstCloud))
         {
             var firstProp = new Property()
             {
-                EnumName = Property.Prop.FirstCloud,
+                EnumName = Prop.FirstCloud,
                 Value = 0,
             };
-            Properties.Add(Property.Prop.FirstCloud, firstProp);
+            Properties.Add(Prop.FirstCloud, firstProp);
         }
-        if(!Properties.ContainsKey(Property.Prop.HighestScore))
+        if(!Properties.ContainsKey(Prop.HighestScore))
         {
             var scoreProp = new Property()
             {
-                EnumName = Property.Prop.HighestScore,
+                EnumName = Prop.HighestScore,
                 Value = 0,
             };
-            Properties.Add(Property.Prop.HighestScore, scoreProp);
+            Properties.Add(Prop.HighestScore, scoreProp);
         }
-        if (!Properties.ContainsKey(Property.Prop.LongestCloudStreak))
+        if (!Properties.ContainsKey(Prop.LongestCloudStreak))
         {
             var streakProp = new Property()
             {
-                EnumName = Property.Prop.LongestCloudStreak,
+                EnumName = Prop.LongestCloudStreak,
                 Value = 0,
             };
-            Properties.Add(Property.Prop.LongestCloudStreak, streakProp);
+            Properties.Add(Prop.LongestCloudStreak, streakProp);
+        }
+    }
+    #endregion
+
+    public void SaveAchievementData()
+    {
+        BinaryFormatter binFormatter = new BinaryFormatter();
+        FileStream stream = new FileStream(Application.persistentDataPath + Constants.AchievementPath, FileMode.OpenOrCreate, FileAccess.Write);
+        binFormatter.Serialize(stream, Achievements);
+        stream.Close();
+    }
+
+    private void LoadAchievementData()
+    {
+        // load the properties
+        try
+        {
+            BinaryFormatter binFormatter = new BinaryFormatter();
+            FileStream stream = new FileStream(Application.persistentDataPath + Constants.AchievementPath, FileMode.OpenOrCreate, FileAccess.Read);
+            object loadedObj = null;
+            if (stream.Length > 0)
+            {
+                loadedObj = binFormatter.Deserialize(stream);
+            }
+            stream.Close();
+            Achievements = loadedObj != null ? (Dictionary<Achieve, Achievement>)loadedObj : new Dictionary<Achieve, Achievement>();
+        }
+        catch (Exception e)
+        {
+            Debug.Log(e.Message);
+            Debug.Log("Unable to parse existing achievements");
+        }
+
+        // ensure achievements exist.
+        if (!Achievements.ContainsKey(Achieve.FirstCloud))
+        {
+            Achievements.Add(
+                Achieve.FirstCloud,
+                new Achievement("First Cloud",
+                    new List<PropertyRelation>() {
+                        new PropertyRelation()
+                        {
+                            PropertyType = Prop.FirstCloud,
+                            CompareType = AchieveCompareType.equal,
+                            Threshold = 1
+                        }
+                    }
+                )
+            );
         }
     }
 }
