@@ -13,6 +13,7 @@ namespace Assets.Script.Data
     public class Constants
     {
         // paths
+        public const string AchievementPath = @"\Achievement.bin";
         public const string PropertyPath = @"\Property.bin";
         public const string HighscorePath = @"\highscore.bin";
 

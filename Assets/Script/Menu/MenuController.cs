@@ -73,7 +73,7 @@ public class MenuController : MonoBehaviour
         // TODO load the achievements and images from the achievement controllers achievement list
         Image image = AchievementPanel.transform.Find(nameof(Component.FirstCloudAchievement)).GetComponent<Image>();
         Color tempColor = image.color;
-        tempColor.a = PersistentData.Instance.AchievementController.FirstCloud ? 1f : 0.4f;
+        tempColor.a = PersistentData.Instance.Achievements[AchievementController.Achieve.FirstCloud].Validate() ? 1f : 0.4f;
         image.color = tempColor;
     }
 
