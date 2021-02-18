@@ -6,16 +6,21 @@ using static AchievementController;
 [Serializable]
 public class Achievement
 {
-    private string Name { get; set; }
+    public string Name { get; set; }
     //TODO add description for achievement
     public List<PropertyRelation> PropRelations { get; set; } // array of related properties
     public DateTime UnlockedDate { get; set; }
+    public string SpriteName { get; set; }
 
-    public Achievement(string name, List<PropertyRelation> requiredProperties)
+    public Achievement() { UnlockedDate = DateTime.MinValue; }
+
+    // todo remove
+    public Achievement(string name, List<PropertyRelation> requiredProperties, string spriteName)
     {
         Name = name;
         PropRelations = requiredProperties;
         UnlockedDate = DateTime.MinValue;
+        SpriteName = spriteName;
     }
 
     public bool Validate()

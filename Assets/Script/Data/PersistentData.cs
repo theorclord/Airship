@@ -97,6 +97,14 @@ public class PersistentData : MonoBehaviour
 
     }
 
+    public void SaveData(object DataCollection, string path)
+    {
+        BinaryFormatter binFormatter = new BinaryFormatter();
+        FileStream stream = new FileStream(Application.persistentDataPath + path, FileMode.OpenOrCreate, FileAccess.Write);
+        binFormatter.Serialize(stream, DataCollection);
+        stream.Close();
+    }
+
     #region HighScore
     public void AddHighscoreEntry(HighScoreEntry highscoreEntry)
     {
@@ -134,16 +142,6 @@ public class PersistentData : MonoBehaviour
         }
     }
 
-
-    public void SaveHighscoreData()
-    {
-        BinaryFormatter binFormatter = new BinaryFormatter();
-        FileStream stream = new FileStream(Application.persistentDataPath + Constants.HighscorePath, FileMode.OpenOrCreate, FileAccess.Write);
-        List<List<HighScoreEntry>> highScores = new List<List<HighScoreEntry>>() { HighscoreEntriesScore, HighscoreEntriesTime };
-        binFormatter.Serialize(stream, highScores);
-        stream.Close();
-    }
-
     private void LoadHighscoreData()
     {
         List<List<HighScoreEntry>> highScores = new List<List<HighScoreEntry>>() { new List<HighScoreEntry>(), new List<HighScoreEntry>() };
@@ -171,6 +169,12 @@ public class PersistentData : MonoBehaviour
         HighscoreEntriesTime = HighScoreLists[1];
     }
 
+    public void SaveHighscoreData()
+    {
+        List<List<HighScoreEntry>> highScores = new List<List<HighScoreEntry>>() { HighscoreEntriesScore, HighscoreEntriesTime };
+        SaveData(highScores, Constants.HighscorePath);
+    }
+
     public void ClearHighScore()
     {
         HighscoreEntriesScore = new List<HighScoreEntry>();
@@ -181,14 +185,6 @@ public class PersistentData : MonoBehaviour
     #endregion
 
     #region PropertyData
-    public void SavePropertyData()
-    {
-        BinaryFormatter binFormatter = new BinaryFormatter();
-        FileStream stream = new FileStream(Application.persistentDataPath + Constants.PropertyPath, FileMode.OpenOrCreate, FileAccess.Write);
-        binFormatter.Serialize(stream, Properties);
-        stream.Close();
-    }
-
     private void LoadPropertyData()
     {
         // load the properties
@@ -241,16 +237,10 @@ public class PersistentData : MonoBehaviour
     }
     #endregion
 
-    public void SaveAchievementData()
-    {
-        BinaryFormatter binFormatter = new BinaryFormatter();
-        FileStream stream = new FileStream(Application.persistentDataPath + Constants.AchievementPath, FileMode.OpenOrCreate, FileAccess.Write);
-        binFormatter.Serialize(stream, Achievements);
-        stream.Close();
-    }
-
+    #region Achievements
     private void LoadAchievementData()
     {
+        var loadedAchievements = new Dictionary<Achieve, Achievement>();
         // load the properties
         try
         {
@@ -262,7 +252,7 @@ public class PersistentData : MonoBehaviour
                 loadedObj = binFormatter.Deserialize(stream);
             }
             stream.Close();
-            Achievements = loadedObj != null ? (Dictionary<Achieve, Achievement>)loadedObj : new Dictionary<Achieve, Achievement>();
+            loadedAchievements = loadedObj != null ? (Dictionary<Achieve, Achievement>)loadedObj : new Dictionary<Achieve, Achievement>();
         }
         catch (Exception e)
         {
@@ -271,21 +261,43 @@ public class PersistentData : MonoBehaviour
         }
 
         // ensure achievements exist.
-        if (!Achievements.ContainsKey(Achieve.FirstCloud))
+        Achievements = new Dictionary<Achieve, Achievement>()
         {
-            Achievements.Add(
+            {
                 Achieve.FirstCloud,
-                new Achievement("First Cloud",
-                    new List<PropertyRelation>() {
+                new Achievement()
+                {
+                    Name = "First Cloud",
+                    PropRelations = new List<PropertyRelation>() {
                         new PropertyRelation()
                         {
                             PropertyType = Prop.FirstCloud,
                             CompareType = AchieveCompareType.equal,
                             Threshold = 1
                         }
-                    }
-                )
-            );
-        }
+                    },
+                    SpriteName = "FirstCloudAchievement",
+                    UnlockedDate = loadedAchievements.ContainsKey(Achieve.FirstCloud) ? loadedAchievements[Achieve.FirstCloud].UnlockedDate : DateTime.MinValue,
+                }
+            },
+            {
+                Achieve.Score500,
+                new Achievement()
+                {
+                    Name = "Score 500",
+                    PropRelations = new List<PropertyRelation>() {
+                        new PropertyRelation()
+                        {
+                            PropertyType = Prop.HighestScore,
+                            CompareType = AchieveCompareType.greater,
+                            Threshold = 500
+                        }
+                    },
+                    SpriteName = "FirstCloudAchievement", // TODO 500 
+                    UnlockedDate = loadedAchievements.ContainsKey(Achieve.Score500) ? loadedAchievements[Achieve.Score500].UnlockedDate : DateTime.MinValue,
+                }
+            }
+        };
     }
+    #endregion
 }
