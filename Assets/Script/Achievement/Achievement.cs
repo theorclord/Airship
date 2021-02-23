@@ -7,21 +7,12 @@ using static AchievementController;
 public class Achievement
 {
     public string Name { get; set; }
-    //TODO add description for achievement
+    public string Description { get; set; }
     public List<PropertyRelation> PropRelations { get; set; } // array of related properties
     public DateTime UnlockedDate { get; set; }
     public string SpriteName { get; set; }
 
     public Achievement() { UnlockedDate = DateTime.MinValue; }
-
-    // todo remove
-    public Achievement(string name, List<PropertyRelation> requiredProperties, string spriteName)
-    {
-        Name = name;
-        PropRelations = requiredProperties;
-        UnlockedDate = DateTime.MinValue;
-        SpriteName = spriteName;
-    }
 
     public bool Validate()
     {
@@ -31,14 +22,17 @@ public class Achievement
         {
             switch (prop.CompareType)
             {
-                case AchieveCompareType.equal:
+                case AchieveCompareType.Equal:
                     isValid = prop.Threshold == PersistentData.Instance.Properties[prop.PropertyType].Value;
                     break;
-                case AchieveCompareType.greater:
+                case AchieveCompareType.Greater:
                     isValid = prop.Threshold < PersistentData.Instance.Properties[prop.PropertyType].Value;
                     break;
-                case AchieveCompareType.less:
+                case AchieveCompareType.Less:
                     isValid = prop.Threshold > PersistentData.Instance.Properties[prop.PropertyType].Value;
+                    break;
+                case AchieveCompareType.GreaterOrEqual:
+                    isValid = prop.Threshold <= PersistentData.Instance.Properties[prop.PropertyType].Value;
                     break;
                 default:
                     // in case new comparison methods are added.

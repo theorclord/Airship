@@ -11,55 +11,28 @@ public class AchievementController
     // This should be a complete list of all the properties in the game
     public enum Prop
     {
-        HighestScore = 100,
-        LongestCloudStreak = 200,
-        FirstCloud = 300,
+        CurrentScore = 100,
+        CurrentCloudStreak = 200,
+        FirstCloud = 300, // TODO: This seems redundant
+        AllTimeScore = 400,
+        CloudsMissed = 500,
+        RocksHit = 600,
     }
-    // TODO check if this is necessary to use
+    
     public enum Achieve
     {
         FirstCloud,
-        Score500
+        Score500,
+        AllTime10000,
+        StreakCloud5,
     }
 
     public enum AchieveCompareType
     {
-        equal, greater, less
+        Equal, Greater, Less, GreaterOrEqual
     }
     #endregion
-
-    private int streakCount;
-    public int StreakCount
-    {
-        get { return streakCount; }
-        set
-        {
-            if (streakCount > PersistentData.Instance.Properties[Prop.LongestCloudStreak].Value)
-            {
-                PersistentData.Instance.Properties[Prop.LongestCloudStreak].Value = streakCount;
-            }
-            streakCount = value;
-        }
-    }
-
-    public bool InitStreakCount { get; set; }
-
-    public int PersistentedPoints
-    {
-        get
-        {
-            return PersistentData.Instance.Properties[Prop.HighestScore].Value;
-        }
-        set
-        {
-            if (PersistentData.Instance.Properties[Prop.HighestScore].Value < value)
-            {
-                UpdateProperty(Prop.HighestScore, value);
-            }
-        }
-    }
-
-
+    
     // longest dodge
     // dodgeroo
 

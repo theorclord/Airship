@@ -187,6 +187,7 @@ public class PersistentData : MonoBehaviour
     #region PropertyData
     private void LoadPropertyData()
     {
+        var loadedProperties = new Dictionary<Prop, Property>();
         // load the properties
         try
         {
@@ -198,7 +199,7 @@ public class PersistentData : MonoBehaviour
                 loadedObj = binFormatter.Deserialize(stream);
             }
             stream.Close();
-            Properties = loadedObj != null ? (Dictionary<Prop, Property>)loadedObj : new Dictionary<Prop, Property>();
+            loadedProperties = loadedObj != null ? (Dictionary<Prop, Property>)loadedObj : new Dictionary<Prop, Property>();
         }
         catch (Exception e)
         {
@@ -206,34 +207,59 @@ public class PersistentData : MonoBehaviour
             Debug.Log("Unable to parse existing properties");
         }
 
+        // TODO make a better way to ensure they are created. Count the enums and the length of the dictionary perhaps?
         // ensure properties exist.
-        if (!Properties.ContainsKey(Prop.FirstCloud))
+        Properties = new Dictionary<Prop, Property>()
         {
-            var firstProp = new Property()
             {
-                EnumName = Prop.FirstCloud,
-                Value = 0,
-            };
-            Properties.Add(Prop.FirstCloud, firstProp);
-        }
-        if(!Properties.ContainsKey(Prop.HighestScore))
-        {
-            var scoreProp = new Property()
+                Prop.FirstCloud,
+                new Property()
+                {
+                    EnumName = Prop.FirstCloud,
+                    Value = loadedProperties.ContainsKey(Prop.FirstCloud) ? loadedProperties[Prop.FirstCloud].Value : 0,
+                }
+            },
             {
-                EnumName = Prop.HighestScore,
-                Value = 0,
-            };
-            Properties.Add(Prop.HighestScore, scoreProp);
-        }
-        if (!Properties.ContainsKey(Prop.LongestCloudStreak))
-        {
-            var streakProp = new Property()
+                Prop.CurrentScore,
+                new Property()
+                {
+                    EnumName = Prop.CurrentScore,
+                    Value = loadedProperties.ContainsKey(Prop.CurrentScore) ? loadedProperties[Prop.CurrentScore].Value : 0,
+                }
+            },
             {
-                EnumName = Prop.LongestCloudStreak,
-                Value = 0,
-            };
-            Properties.Add(Prop.LongestCloudStreak, streakProp);
-        }
+                Prop.CurrentCloudStreak,
+                new Property()
+                {
+                    EnumName = Prop.CurrentCloudStreak,
+                    Value = loadedProperties.ContainsKey(Prop.CurrentCloudStreak) ? loadedProperties[Prop.CurrentCloudStreak].Value : 0,
+                }
+            },
+            {
+                Prop.AllTimeScore,
+                new Property()
+                {
+                    EnumName = Prop.AllTimeScore,
+                    Value = loadedProperties.ContainsKey(Prop.AllTimeScore) ? loadedProperties[Prop.AllTimeScore].Value : 0,
+                }
+            },
+            {
+                Prop.RocksHit,
+                new Property()
+                {
+                    EnumName = Prop.RocksHit,
+                    Value = loadedProperties.ContainsKey(Prop.RocksHit) ? loadedProperties[Prop.RocksHit].Value : 0,
+                }
+            },
+            {
+                Prop.CloudsMissed,
+                new Property()
+                {
+                    EnumName = Prop.CloudsMissed,
+                    Value = loadedProperties.ContainsKey(Prop.CloudsMissed) ? loadedProperties[Prop.CloudsMissed].Value : 0,
+                }
+            },
+        };
     }
     #endregion
 
@@ -268,11 +294,12 @@ public class PersistentData : MonoBehaviour
                 new Achievement()
                 {
                     Name = "First Cloud",
+                    Description = "Starting out small. Catch your first cloud",
                     PropRelations = new List<PropertyRelation>() {
                         new PropertyRelation()
                         {
                             PropertyType = Prop.FirstCloud,
-                            CompareType = AchieveCompareType.equal,
+                            CompareType = AchieveCompareType.Equal,
                             Threshold = 1
                         }
                     },
@@ -284,19 +311,56 @@ public class PersistentData : MonoBehaviour
                 Achieve.Score500,
                 new Achievement()
                 {
-                    Name = "Score 500",
+                    Name = "First flight",
+                    Description = "This is becoming a small business adventure. Score 500 points",
                     PropRelations = new List<PropertyRelation>() {
                         new PropertyRelation()
                         {
-                            PropertyType = Prop.HighestScore,
-                            CompareType = AchieveCompareType.greater,
+                            PropertyType = Prop.CurrentScore,
+                            CompareType = AchieveCompareType.GreaterOrEqual,
                             Threshold = 500
                         }
                     },
-                    SpriteName = "FirstCloudAchievement", // TODO 500 
+                    SpriteName = "FirstCloudAchievement", // TODO create sprite 
                     UnlockedDate = loadedAchievements.ContainsKey(Achieve.Score500) ? loadedAchievements[Achieve.Score500].UnlockedDate : DateTime.MinValue,
                 }
-            }
+            },
+            {
+                Achieve.AllTime10000,
+                new Achievement()
+                {
+                    Name = "Breaking 10000",
+                    Description = "Try and try again. Score 10000 points, can be done over multiple playthroughs",
+                    PropRelations = new List<PropertyRelation>() {
+                        new PropertyRelation()
+                        {
+                            PropertyType = Prop.AllTimeScore,
+                            CompareType = AchieveCompareType.GreaterOrEqual,
+                            Threshold = 10000
+                        }
+                    },
+                    SpriteName = "FirstCloudAchievement", // TODO create sprite 
+                    UnlockedDate = loadedAchievements.ContainsKey(Achieve.AllTime10000) ? loadedAchievements[Achieve.AllTime10000].UnlockedDate : DateTime.MinValue,
+                }
+            },
+            {
+                Achieve.StreakCloud5,
+                new Achievement()
+                {
+                    Name = "Warming up",
+                    Description = "Do not let any cloud go to waste. Collect 5 clouds in a row",
+                    PropRelations = new List<PropertyRelation>() {
+                        new PropertyRelation()
+                        {
+                            PropertyType = Prop.CurrentCloudStreak,
+                            CompareType = AchieveCompareType.GreaterOrEqual,
+                            Threshold = 5
+                        }
+                    },
+                    SpriteName = "FirstCloudAchievement", // TODO create sprite 
+                    UnlockedDate = loadedAchievements.ContainsKey(Achieve.StreakCloud5) ? loadedAchievements[Achieve.StreakCloud5].UnlockedDate : DateTime.MinValue,
+                }
+            },
         };
     }
     #endregion

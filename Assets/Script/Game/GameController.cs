@@ -1,5 +1,6 @@
 ﻿using Assets.Script.Data;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -99,13 +100,14 @@ public class GameController : MonoBehaviour
         if (!GameOver)
         {
             currentScore += 100;
-            acController.PersistentedPoints = currentScore;
-            var newAchievements = acController.UpdateProperty(Prop.HighestScore, currentScore);
-            var newAchievements1 = acController.UpdateProperty(Prop.FirstCloud, 1);
+            var newAchievements = new List<Achievement>();
+            newAchievements.AddRange(acController.UpdateProperty(Prop.AllTimeScore, PersistentData.Instance.Properties[Prop.AllTimeScore].Value + 100));
+            newAchievements.AddRange(acController.UpdateProperty(Prop.CurrentScore, currentScore));
+            newAchievements.AddRange(acController.UpdateProperty(Prop.FirstCloud, 1));
+            newAchievements.AddRange(acController.UpdateProperty(Prop.CurrentCloudStreak, PersistentData.Instance.Properties[Prop.CurrentCloudStreak].Value + 1));
             // 2020-02-18 TODO: display the new achievements on screen.
 
             ScoreText.GetComponent<Text>().text = "Score: " + currentScore;
-            acController.StreakCount++;
         }
     }
 
@@ -118,7 +120,7 @@ public class GameController : MonoBehaviour
         }
         LivesText.GetComponent<Text>().text = "Lives: " + lives;
         // call achievement controller
-        acController.InitStreakCount = false;
+        acController.UpdateProperty(Prop.RocksHit, PersistentData.Instance.Properties[Prop.RocksHit].Value + 1);
     }
 
     /// <summary>
@@ -144,7 +146,8 @@ public class GameController : MonoBehaviour
 
     public void CloudMissed()
     {
-        acController.StreakCount = 0;
+        acController.UpdateProperty(Prop.CurrentCloudStreak, 0);
+        acController.UpdateProperty(Prop.CloudsMissed, PersistentData.Instance.Properties[Prop.CloudsMissed].Value + 1);
     }
 
     public void ReturnToMainMenu()
