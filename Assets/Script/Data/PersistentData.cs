@@ -206,8 +206,7 @@ public class PersistentData : MonoBehaviour
             Debug.Log(e.Message);
             Debug.Log("Unable to parse existing properties");
         }
-
-        // TODO make a better way to ensure they are created. Count the enums and the length of the dictionary perhaps?
+        
         // ensure properties exist.
         Properties = new Dictionary<Prop, Property>()
         {
@@ -257,6 +256,14 @@ public class PersistentData : MonoBehaviour
                 {
                     EnumName = Prop.CloudsMissed,
                     Value = loadedProperties.ContainsKey(Prop.CloudsMissed) ? loadedProperties[Prop.CloudsMissed].Value : 0,
+                }
+            },
+            {
+                Prop.CurrentSpeed,
+                new Property()
+                {
+                    EnumName = Prop.CurrentSpeed,
+                    Value = loadedProperties.ContainsKey(Prop.CurrentSpeed) ? loadedProperties[Prop.CurrentSpeed].Value : 0,
                 }
             },
         };
@@ -321,7 +328,7 @@ public class PersistentData : MonoBehaviour
                             Threshold = 500
                         }
                     },
-                    SpriteName = "FirstCloudAchievement", // TODO create sprite 
+                    SpriteName = "Cloud500Achievement",
                     UnlockedDate = loadedAchievements.ContainsKey(Achieve.Score500) ? loadedAchievements[Achieve.Score500].UnlockedDate : DateTime.MinValue,
                 }
             },
@@ -357,8 +364,26 @@ public class PersistentData : MonoBehaviour
                             Threshold = 5
                         }
                     },
-                    SpriteName = "FirstCloudAchievement", // TODO create sprite 
+                    SpriteName = "Streak5Achievement",
                     UnlockedDate = loadedAchievements.ContainsKey(Achieve.StreakCloud5) ? loadedAchievements[Achieve.StreakCloud5].UnlockedDate : DateTime.MinValue,
+                }
+            },
+            {
+                Achieve.MaxSpeed,
+                new Achievement()
+                {
+                    Name = "Full Throttle",
+                    Description = "This one goes to 11. Reach max speed",
+                    PropRelations = new List<PropertyRelation>() {
+                        new PropertyRelation()
+                        {
+                            PropertyType = Prop.CurrentSpeed,
+                            CompareType = AchieveCompareType.Equal,
+                            Threshold = (int)Constants.MaxSpeed+1
+                        }
+                    },
+                    SpriteName = "MaxSpeedAchievement",
+                    UnlockedDate = loadedAchievements.ContainsKey(Achieve.MaxSpeed) ? loadedAchievements[Achieve.MaxSpeed].UnlockedDate : DateTime.MinValue,
                 }
             },
         };

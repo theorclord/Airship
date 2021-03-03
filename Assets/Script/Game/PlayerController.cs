@@ -18,22 +18,22 @@ public class PlayerController : MonoBehaviour
             if (Input.GetKey(KeyCode.D))
             {
                 Vector3 movement = new Vector3(1, 0);
-                transform.Translate(movement * Constants.PlayerSpeed * GameController.Instance.CurrentSpeedModifier);
+                transform.Translate(movement * Constants.PlayerSpeed * GameController.Instance.CurrentSpeedModifier);// Mathf.Clamp(GameController.Instance.CurrentSpeedModifier / 3f, 1.0f,10f));
             }
             if (Input.GetKey(KeyCode.A))
             {
                 Vector3 movement = new Vector3(-1, 0);
-                transform.Translate(movement * Constants.PlayerSpeed * GameController.Instance.CurrentSpeedModifier);
+                transform.Translate(movement * Constants.PlayerSpeed * GameController.Instance.CurrentSpeedModifier);// Mathf.Clamp(GameController.Instance.CurrentSpeedModifier / 3f, 1.0f,10f));
             }
             if (Input.GetKey(KeyCode.W))
             {
                 Vector3 movement = new Vector3(0, 1);
-                transform.Translate(movement * Constants.PlayerSpeed * GameController.Instance.CurrentSpeedModifier);
+                transform.Translate(movement * Constants.PlayerSpeed * GameController.Instance.CurrentSpeedModifier);// Mathf.Clamp(GameController.Instance.CurrentSpeedModifier / 3f, 1.0f,10f));
             }
             if (Input.GetKey(KeyCode.S))
             {
                 Vector3 movement = new Vector3(0, -1);
-                transform.Translate(movement * Constants.PlayerSpeed * GameController.Instance.CurrentSpeedModifier);
+                transform.Translate(movement * Constants.PlayerSpeed * GameController.Instance.CurrentSpeedModifier);// Mathf.Clamp(GameController.Instance.CurrentSpeedModifier / 3f, 1.0f,10f));
             }
 
             // Clamp the player object, so that it can't leave the camera frame.

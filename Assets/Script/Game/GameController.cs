@@ -76,6 +76,7 @@ public class GameController : MonoBehaviour
 
             // Speed up the game
             CurrentSpeedModifier = 1 + Mathf.Clamp(Mathf.Floor((Time.time- TimeInitial) / Constants.SpeedFactor) / 10, 0, Constants.MaxSpeed);
+            acController.UpdateProperty(Prop.CurrentSpeed, (int)CurrentSpeedModifier);
             CurrentRockSpawnFrequency = Constants.RockSpawnFrequency / CurrentSpeedModifier;
             CurrentCloudSpawnFrequency = Constants.CloudSpawnFrequency / CurrentSpeedModifier;
         }

@@ -1268,6 +1268,7 @@ MonoBehaviour:
   m_CaretBlinkRate: 0.85
   m_CaretWidth: 1
   m_ReadOnly: 0
+  m_ShouldActivateOnSelect: 1
 --- !u!114 &625382235
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2100,6 +2101,7 @@ GameObject:
   - component: {fileID: 1074613390}
   - component: {fileID: 1074613389}
   - component: {fileID: 1074613391}
+  - component: {fileID: 1074613392}
   m_Layer: 0
   m_Name: Airship
   m_TagString: Untagged
@@ -2235,7 +2237,7 @@ CircleCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1074613385}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 0
@@ -2243,7 +2245,23 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.12
+  m_Radius: 0.1
+--- !u!70 &1074613392
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1074613385}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: -0.005}
+  m_Size: {x: 0.23, y: 0.17}
+  m_Direction: 1
 --- !u!1 &1081215919
 GameObject:
   m_ObjectHideFlags: 0

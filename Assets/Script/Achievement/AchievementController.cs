@@ -17,6 +17,7 @@ public class AchievementController
         AllTimeScore = 400,
         CloudsMissed = 500,
         RocksHit = 600,
+        CurrentSpeed = 700,
     }
     
     public enum Achieve
@@ -25,6 +26,7 @@ public class AchievementController
         Score500,
         AllTime10000,
         StreakCloud5,
+        MaxSpeed,
     }
 
     public enum AchieveCompareType
