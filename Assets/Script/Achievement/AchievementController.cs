@@ -18,6 +18,8 @@ public class AchievementController
         CloudsMissed = 500,
         RocksHit = 600,
         CurrentSpeed = 700,
+        TotalDeaths = 800,
+        CurrentTimeSpent = 900,
     }
     
     public enum Achieve
@@ -27,6 +29,7 @@ public class AchievementController
         AllTime10000,
         StreakCloud5,
         MaxSpeed,
+        FirstDeath,
     }
 
     public enum AchieveCompareType

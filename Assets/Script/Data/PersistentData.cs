@@ -223,7 +223,7 @@ public class PersistentData : MonoBehaviour
                 new Property()
                 {
                     EnumName = Prop.CurrentScore,
-                    Value = loadedProperties.ContainsKey(Prop.CurrentScore) ? loadedProperties[Prop.CurrentScore].Value : 0,
+                    Value = 0,
                 }
             },
             {
@@ -231,7 +231,7 @@ public class PersistentData : MonoBehaviour
                 new Property()
                 {
                     EnumName = Prop.CurrentCloudStreak,
-                    Value = loadedProperties.ContainsKey(Prop.CurrentCloudStreak) ? loadedProperties[Prop.CurrentCloudStreak].Value : 0,
+                    Value = 0,
                 }
             },
             {
@@ -263,7 +263,23 @@ public class PersistentData : MonoBehaviour
                 new Property()
                 {
                     EnumName = Prop.CurrentSpeed,
-                    Value = loadedProperties.ContainsKey(Prop.CurrentSpeed) ? loadedProperties[Prop.CurrentSpeed].Value : 0,
+                    Value = 0,
+                }
+            },
+            {
+                Prop.TotalDeaths,
+                new Property()
+                {
+                    EnumName = Prop.TotalDeaths,
+                    Value = loadedProperties.ContainsKey(Prop.TotalDeaths) ? loadedProperties[Prop.TotalDeaths].Value : 0,
+                }
+            },
+            {
+                Prop.CurrentTimeSpent,
+                new Property()
+                {
+                    EnumName = Prop.CurrentTimeSpent,
+                    Value = 0,
                 }
             },
         };
@@ -384,6 +400,24 @@ public class PersistentData : MonoBehaviour
                     },
                     SpriteName = "MaxSpeedAchievement",
                     UnlockedDate = loadedAchievements.ContainsKey(Achieve.MaxSpeed) ? loadedAchievements[Achieve.MaxSpeed].UnlockedDate : DateTime.MinValue,
+                }
+            },
+            {
+                Achieve.FirstDeath,
+                new Achievement()
+                {
+                    Name = "Down For The Count",
+                    Description = "You have blasted of for the last time. First death.",
+                    PropRelations = new List<PropertyRelation>() {
+                        new PropertyRelation()
+                        {
+                            PropertyType = Prop.TotalDeaths,
+                            CompareType = AchieveCompareType.GreaterOrEqual,
+                            Threshold = 1
+                        }
+                    },
+                    SpriteName = "FirsthDeathAchievement",
+                    UnlockedDate = loadedAchievements.ContainsKey(Achieve.FirstDeath) ? loadedAchievements[Achieve.FirstDeath].UnlockedDate : DateTime.MinValue,
                 }
             },
         };
