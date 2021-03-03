@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -70,11 +71,22 @@ public class MenuController : MonoBehaviour
     {
         SetActiveFalse();
         AchievementPanel.SetActive(true);
+        var containerTransform = AchievementPanel.transform.Find(nameof(Component.AchievementGrid));
+
+        // Clear existing children
+        List<GameObject> achieveEntries = new List<GameObject>();
+        for (int i = 0; i < containerTransform.childCount; i++)
+        {
+            achieveEntries.Add(containerTransform.GetChild(i).gameObject);
+        }
+        foreach (GameObject go in achieveEntries)
+        {
+            Destroy(go);
+        }
 
         // load the achievements and images from the achievement controllers achievement list
-        foreach(var ach in PersistentData.Instance.Achievements)
+        foreach (var ach in PersistentData.Instance.Achievements)
         {
-            var containerTransform = AchievementPanel.transform.Find(nameof(Component.AchievementGrid));
             var achievementMenuItem = Instantiate(Resources.Load("MenuAchievement"), containerTransform) as GameObject;
             var achievementSprite = Resources.Load<Sprite>(ach.Value.SpriteName);
             var achievementImage = achievementMenuItem.GetComponent<Image>();
