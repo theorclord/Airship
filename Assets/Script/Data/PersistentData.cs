@@ -346,7 +346,7 @@ public class PersistentData : MonoBehaviour
                             Threshold = 10000
                         }
                     },
-                    SpriteName = "FirstCloudAchievement", // TODO create sprite 
+                    SpriteName = "AllTime10000Achievement", // TODO create sprite 
                     UnlockedDate = loadedAchievements.ContainsKey(Achieve.AllTime10000) ? loadedAchievements[Achieve.AllTime10000].UnlockedDate : DateTime.MinValue,
                 }
             },
