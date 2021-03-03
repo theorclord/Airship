@@ -75,7 +75,7 @@ public class GameController : MonoBehaviour
             }
 
             // Speed up the game
-            CurrentSpeedModifier = 1 + Mathf.Clamp(Mathf.Floor((Time.time- TimeInitial) / Constants.SpeedFactor) / 10, 0, Constants.MaxSpeed);
+            CurrentSpeedModifier = 1 + Mathf.Clamp(Mathf.Floor((Time.time-TimeInitial) / Constants.SpeedFactor) / 10, 0, Constants.MaxSpeed);
             acController.UpdateProperty(Prop.CurrentSpeed, (int)CurrentSpeedModifier);
             CurrentRockSpawnFrequency = Constants.RockSpawnFrequency / CurrentSpeedModifier;
             CurrentCloudSpawnFrequency = Constants.CloudSpawnFrequency / CurrentSpeedModifier;
@@ -115,13 +115,14 @@ public class GameController : MonoBehaviour
     public void DescreaseLives()
     {
         lives -= 1;
+        // call achievement controller
+        acController.UpdateProperty(Prop.RocksHit, PersistentData.Instance.Properties[Prop.RocksHit].Value + 1);
         if (lives <= 0 && !GameOver)
         {
+            acController.UpdateProperty(Prop.TotalDeaths, PersistentData.Instance.Properties[Prop.TotalDeaths].Value + 1);
             HandleGameOver();
         }
         LivesText.GetComponent<Text>().text = "Lives: " + lives;
-        // call achievement controller
-        acController.UpdateProperty(Prop.RocksHit, PersistentData.Instance.Properties[Prop.RocksHit].Value + 1);
     }
 
     /// <summary>
@@ -132,17 +133,19 @@ public class GameController : MonoBehaviour
         HighscoreSaved = false;
         GameOver = true;
         GameOverScreen.SetActive(true);
+        var gameTime = Time.time - TimeInitial;
         HighScoreEntry hsEntry = new HighScoreEntry()
         {
             Date = DateTime.Now,
             Score = currentScore,
-            Time = Time.time
+            Time = gameTime
         };
         PersistentData.Instance.CurrentHighscoreEntry = hsEntry;
         
         GameOverScreen.transform.GetChild(1).GetComponent<Text>().text = "Score: " + currentScore;
-        GameOverScreen.transform.GetChild(2).GetComponent<Text>().text = "Time: " + Time.time;
+        GameOverScreen.transform.GetChild(2).GetComponent<Text>().text = "Time: " + gameTime;
         // call achievement controller
+        acController.UpdateProperty(Prop.CurrentTimeSpent, (int)gameTime);
     }
 
     public void CloudMissed()
