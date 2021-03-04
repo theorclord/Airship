@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-using UnityEditor;
-using System;
+﻿using System;
 using static AchievementController;
 
 /// General counters of data through a game
