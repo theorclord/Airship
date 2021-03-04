@@ -156,7 +156,7 @@ public class PersistentData : MonoBehaviour
                 loadedObj = binFormatter.Deserialize(stream);
             }
             stream.Close();
-            highScores = (List<List<HighScoreEntry>>)loadedObj;
+            highScores = loadedObj != null ? (List<List<HighScoreEntry>>)loadedObj : new List<List<HighScoreEntry>>() { new List<HighScoreEntry>(), new List<HighScoreEntry>() };
         }
         catch (Exception e)
         {

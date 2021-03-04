@@ -30,8 +30,6 @@ public class GameController : MonoBehaviour
     private bool HighscoreSaved = false;
     public bool GameOver = false;
     private int currentScore = 0;
-
-    private float TimeInitial;
     
     public static GameController Instance { get; set; }
 
@@ -52,7 +50,6 @@ public class GameController : MonoBehaviour
     void Start()
     {
         LivesText.GetComponent<Text>().text = "Lives: " + lives;
-        TimeInitial = Time.time;
         acController = PersistentData.Instance.AchievementController;
         AudioSourceController.GetComponent<AudioSource>().volume = PersistentData.Instance.SoundVal;
     }
@@ -60,26 +57,6 @@ public class GameController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!GameOver && !PersistentData.Instance.Pause)
-        {
-            if (Time.time - timeCloudLastSpawn > Constants.CloudSpawnFrequency)
-            {
-                timeCloudLastSpawn = Time.time;
-                Instantiate(Cloud, new Vector3(Constants.SpawnX, UnityEngine.Random.Range(-10f, 10f)), Quaternion.identity);
-            }
-
-            if (Time.time - timeRockLastSpawn > CurrentRockSpawnFrequency)
-            {
-                timeRockLastSpawn = Time.time;
-                Instantiate(Rock, new Vector3(Constants.SpawnX, UnityEngine.Random.Range(-10f, 10f)), Quaternion.identity);
-            }
-
-            // Speed up the game
-            CurrentSpeedModifier = 1 + Mathf.Clamp(Mathf.Floor((Time.time-TimeInitial) / Constants.SpeedFactor) / 10, 0, Constants.MaxSpeed);
-            acController.UpdateProperty(Prop.CurrentSpeed, (int)CurrentSpeedModifier);
-            CurrentRockSpawnFrequency = Constants.RockSpawnFrequency / CurrentSpeedModifier;
-            CurrentCloudSpawnFrequency = Constants.CloudSpawnFrequency / CurrentSpeedModifier;
-        }
         if (Input.GetKeyDown(KeyCode.P) || Input.GetKeyDown(KeyCode.Pause))
         {
             PersistentData.Instance.Pause = Menu.activeSelf ? Menu.activeSelf : !PersistentData.Instance.Pause;
@@ -88,6 +65,32 @@ public class GameController : MonoBehaviour
         {
             ChangeMenuState();
         } 
+    }
+
+    private void FixedUpdate()
+    {
+        if (!GameOver && !PersistentData.Instance.Pause)
+        {
+
+            var adjustedTime = Time.timeSinceLevelLoad;
+            // Speed up the game
+            CurrentSpeedModifier = 1 + Mathf.Clamp(Mathf.Floor((adjustedTime) / Constants.SpeedFactor) / 10, 0, Constants.MaxSpeed);
+            acController.UpdateProperty(Prop.CurrentSpeed, (int)CurrentSpeedModifier);
+            CurrentRockSpawnFrequency = Constants.RockSpawnFrequency / CurrentSpeedModifier;
+            CurrentCloudSpawnFrequency = Constants.CloudSpawnFrequency / CurrentSpeedModifier;
+
+            if (adjustedTime - timeCloudLastSpawn > CurrentCloudSpawnFrequency)
+            {
+                timeCloudLastSpawn = Time.timeSinceLevelLoad;
+                Instantiate(Cloud, new Vector3(Constants.SpawnX, UnityEngine.Random.Range(-10f, 10f)), Quaternion.identity);
+            }
+
+            if (adjustedTime - timeRockLastSpawn > CurrentRockSpawnFrequency)
+            {
+                timeRockLastSpawn = Time.timeSinceLevelLoad;
+                Instantiate(Rock, new Vector3(Constants.SpawnX, UnityEngine.Random.Range(-10f, 10f)), Quaternion.identity);
+            }
+        }
     }
 
     public void ChangeMenuState()
@@ -133,7 +136,7 @@ public class GameController : MonoBehaviour
         HighscoreSaved = false;
         GameOver = true;
         GameOverScreen.SetActive(true);
-        var gameTime = Time.time - TimeInitial;
+        var gameTime = Time.timeSinceLevelLoad;
         HighScoreEntry hsEntry = new HighScoreEntry()
         {
             Date = DateTime.Now,
