@@ -30,6 +30,7 @@ public class AchievementController
         StreakCloud5,
         MaxSpeed,
         FirstDeath,
+        TimeSpent60,
     }
 
     public enum AchieveCompareType

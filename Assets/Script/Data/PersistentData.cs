@@ -420,6 +420,24 @@ public class PersistentData : MonoBehaviour
                     UnlockedDate = loadedAchievements.ContainsKey(Achieve.FirstDeath) ? loadedAchievements[Achieve.FirstDeath].UnlockedDate : DateTime.MinValue,
                 }
             },
+            {
+                Achieve.TimeSpent60,
+                new Achievement()
+                {
+                    Name = "On the clock",
+                    Description = "Time flies when you are having fun. Spend 60 sec in a game.",
+                    PropRelations = new List<PropertyRelation>() {
+                        new PropertyRelation()
+                        {
+                            PropertyType = Prop.CurrentTimeSpent,
+                            CompareType = AchieveCompareType.GreaterOrEqual,
+                            Threshold = 60
+                        }
+                    },
+                    SpriteName = "TimeSpent60achievement",
+                    UnlockedDate = loadedAchievements.ContainsKey(Achieve.TimeSpent60) ? loadedAchievements[Achieve.TimeSpent60].UnlockedDate : DateTime.MinValue,
+                }
+            },
         };
     }
     #endregion
