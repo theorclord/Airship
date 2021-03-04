@@ -18,11 +18,12 @@ namespace Assets.Script.Data
         public const string HighscorePath = @"\highscore.bin";
 
         // game constants
-        public const float CloudSpeed = 0.02f;
+        public const float CloudSpeed = 0.1f;
+        public const float RockSpeed = 0.05f;
         public const float SpeedFactor = 2.5f;
         public const float SpawnX = 25f; // the value of x for the spawning of new objects for the game
-        public const float RockSpawnFrequency = 2f;
-        public const float CloudSpawnFrequency = 1f;
+        public const float RockSpawnFrequency = 3f;
+        public const float CloudSpawnFrequency = 2f;
         public const float MaxSpeed = 10f;
         public const float BackgroundSpeed = 2f;
         public const int StartingLives = 3;
@@ -30,10 +31,9 @@ namespace Assets.Script.Data
         public const int NumberHighscoreEntries = 10;
 
         // player constants
-        public const float PlayerSpeed = 0.03f;
+        public const float PlayerSpeed = 0.2f;
         public const float PlayerSpriteSize = 40f;
-
-        public const float RockSpeed = 0.01f;
+        
 
         // string Const
         public const string PlayerObjectName = "Airship";

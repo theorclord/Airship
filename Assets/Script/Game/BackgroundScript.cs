@@ -23,7 +23,7 @@ public class BackgroundScript : MonoBehaviour
     }
     
 
-    void Update()
+    void FixedUpdate()
     {
         if (GameController.Instance.GameOver)
         {

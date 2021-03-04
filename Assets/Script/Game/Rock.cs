@@ -12,7 +12,7 @@ public class Rock : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         if (!PersistentData.Instance.Pause)
         {
