@@ -12,11 +12,11 @@ public class Rock : MonoBehaviour
     }
 
     // Update is called once per frame
-    void FixedUpdate()
+    void Update()
     {
         if (!PersistentData.Instance.Pause)
         {
-            transform.Translate(new Vector3(-1 * Constants.RockSpeed * GameController.Instance.CurrentSpeedModifier, 0));
+            transform.Translate(new Vector3(-1 * Constants.RockSpeed * GameController.Instance.CurrentSpeedModifier * Time.deltaTime, 0));
         }
     }
 

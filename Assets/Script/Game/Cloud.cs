@@ -3,19 +3,28 @@ using UnityEngine;
 
 public class Cloud : MonoBehaviour
 {
+    private Vector3 CurrentPosition;
     // Use this for initialization
     void Start()
     {
         GetComponent<AudioSource>().volume = PersistentData.Instance.SoundVal;
     }
 
-    // Update is called once per frame
-    void FixedUpdate()
+    void Update()
     {
         if (!PersistentData.Instance.Pause)
         {
-            transform.Translate(new Vector3(-1 * Constants.CloudSpeed * GameController.Instance.CurrentSpeedModifier, 0));
+            transform.Translate(new Vector3(-1 * Constants.CloudSpeed * GameController.Instance.CurrentSpeedModifier * Time.deltaTime, 0));
         }
+    }
+
+    // Update is called once per frame
+    void FixedUpdate()
+    {
+        //if (!PersistentData.Instance.Pause)
+        //{
+        //    transform.Translate(new Vector3(-1 * Constants.CloudSpeed * GameController.Instance.CurrentSpeedModifier*Time.deltaTime, 0));
+        //}
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
