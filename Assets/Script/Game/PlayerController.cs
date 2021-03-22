@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    private float Counter { get; set; }
+
     // Use this for initialization
     void Start()
     {
@@ -15,25 +17,34 @@ public class PlayerController : MonoBehaviour
     {
         if (!PersistentData.Instance.Pause)
         {
+            if(Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S))
+            {
+                Counter++;
+                Counter = Counter > 10f ? 10f : Counter;
+            } else
+            {
+                Counter = 1f;
+            }
+
             if (Input.GetKey(KeyCode.D))
             {
                 Vector3 movement = new Vector3(1, 0);
-                transform.Translate(movement * Constants.PlayerSpeed * GameController.Instance.CurrentSpeedModifier * Time.deltaTime);
+                transform.Translate(movement * Constants.PlayerSpeed * GameController.Instance.CurrentSpeedModifier * Time.deltaTime * Counter/10f);
             }
             if (Input.GetKey(KeyCode.A))
             {
                 Vector3 movement = new Vector3(-1, 0);
-                transform.Translate(movement * Constants.PlayerSpeed * GameController.Instance.CurrentSpeedModifier * Time.deltaTime);
+                transform.Translate(movement * Constants.PlayerSpeed * GameController.Instance.CurrentSpeedModifier * Time.deltaTime * Counter / 10f);
             }
             if (Input.GetKey(KeyCode.W))
             {
                 Vector3 movement = new Vector3(0, 1);
-                transform.Translate(movement * Constants.PlayerSpeed * GameController.Instance.CurrentSpeedModifier * Time.deltaTime);
+                transform.Translate(movement * Constants.PlayerSpeed * GameController.Instance.CurrentSpeedModifier * Time.deltaTime * Counter / 10f);
             }
             if (Input.GetKey(KeyCode.S))
             {
                 Vector3 movement = new Vector3(0, -1);
-                transform.Translate(movement * Constants.PlayerSpeed * GameController.Instance.CurrentSpeedModifier * Time.deltaTime);
+                transform.Translate(movement * Constants.PlayerSpeed * GameController.Instance.CurrentSpeedModifier * Time.deltaTime * Counter / 10f);
             }
 
             // Clamp the player object, so that it can't leave the camera frame.
